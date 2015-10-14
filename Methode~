@@ -1,0 +1,38 @@
+http://nymphomath.ch/crypto/activites/index.html
+http://www.apprendre-en-ligne.net/crypto/vigenere/decryptauto.html
+http://blogs.univ-poitiers.fr/laurentsignac/2013/10/30/dechiffrer-automatiquement-le-chiffre-de-vigenere/
+
+1 ere etape : 
+Trouver la longueur de la clé : 
+	2 methodes : 
+		Kasiski
+		Indice de coincidence (Friedman)
+
+Avec le test de Friedman, on test plusieurs longeur de clé, jusqu'a trouvé la bonne. On sait si c'est la bonne (pour le francais) si l'indice trouvé est proche de 2.02 ??? (1.73 pour l'anglais).
+
+2 eme etape : 
+Trouvé la clé : (decimation du texte)
+On connait la longeur de la clé : 	AAAAA
+On connait le texte : 			KQGBCFJGCFJVJFHGDSJBOLIU
+On test 26 fois pour chaque lettre de la clé, jusqu'a trouvé la clée elle meme.
+
+------------------------------------------
+Algo pour trouver la longueur de la clé :
+
+Decouper le texte en intervalles de 1 à ...;
+Pour chaques sous chaines extraite faire
+	 Calcul de l'indice de coincidence;
+Comparer tous les resultats et prendre celui qui se rapproche le plus de la langue francaise, a savoir : 0.077 (selon wikipedia) ou 0.074 selon un autre site.
+
+Sachant que l'indice de coincidence se calcule de la maniere suivante : IC = (1/m)((N-m)/(N-1)).IClangue + ((m-1)/(m))((N)/(N-1))*(0.038)
+http://nymphomath.ch/crypto/stat/ic2.html
+Avec N le nombre de lettre du message
+IClangue est l'indice pour la langue du cryptogramme (fr=0.074)
+et m est le nombre d'alphabets (la longueur de la clé).
+
+
+Une fois la longueur de la clé trouvé, on passe a la deuxieme etape. Qui est de trouvé la clé.
+
+
+
+	

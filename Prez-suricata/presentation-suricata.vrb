@@ -1,0 +1,5 @@
+\begin {center}
+\begin{verbatim}
+alert http any any -> any any (msg:"Acces a inria"; content:"www.inria.fr"; http_uri;)
+\end{verbatim}
+\end{center}

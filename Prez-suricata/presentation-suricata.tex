@@ -6,7 +6,7 @@
 
 \usetheme{Warsaw}
 
-\title{IDS - Suricata / Snort}
+\title{IDS - Suricata}
 \author{Aurélien Monnet-Paquet}
 \institute{www.inria.fr}
 \date{17 Mars 2016}
@@ -16,6 +16,9 @@
 %Premiere page : page de garde.
 \begin{frame}
 \titlepage
+\begin{center}
+\includegraphics[scale=3]{img/suri.png}
+\end{center}
 \end{frame}
 
 %Deuxieme page : Qu'est ce qu'un IDS ?
@@ -34,6 +37,21 @@
 \end{itemize}
 \end{frame}
 
+%Page additionnel : Qu'est ce qu'un IPS ?
+\subsection{Mode IPS}
+\begin{frame}
+\frametitle{La différence avec un IPS ?}
+\begin{itemize}
+\setbeamertemplate{itemize item}[triangle]
+\item Systèmes de prévention d'intrusion
+\item Pas discret, facilement détectable
+\pause
+\item Bloque tout ce qui parait infectieux, y compris le trafic légitime
+\pause
+\item Pas la même méthode d'analyse qu'en mode IDS
+\end{itemize}
+\end{frame}
+
 %Troisieme page : But de suricata
 \subsection{Suricata}
 \begin{frame}
@@ -42,7 +60,7 @@
 \setbeamertemplate{itemize item}[triangle]
 \item Apporter de nouvelles technologies aux IDS :
 \begin{itemize}
-\item Performance : Le multi-threads
+\item Performance : Le multi-threading
 \item Accélération matérielle (par GPU)
 \end{itemize}
 \item Support d'IPv6 natif
@@ -96,9 +114,9 @@
 \subsection{Exemple de règles}
 \begin{frame}
 \frametitle{Fonctionnement des règles de matching}
-\begin{center}
+\begin{block}{}
 \textcolor{red}{alert} http any any $\rightarrow$ any any (msg:""; content:"inria.fr";)
-\end{center}
+\end{block}
 Actions :
 \begin{enumerate}
 \item pass
@@ -111,9 +129,9 @@ Actions :
 %7 eme page : Exemple de regles (http)
 \begin{frame}
 \frametitle{Fonctionnement des règles de matching}
-\begin{center}
+\begin{block}{}
 alert \textcolor{green}{http} any any $\rightarrow$ any any (msg:""; content:"inria.fr";)
-\end{center}
+\end{block}
 Protocole :
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
@@ -126,9 +144,9 @@ Protocole :
 %8 eme page : Exemple de regles (Source / Destination)
 \begin{frame}
 \frametitle{Fonctionnement des règles de matching}
-\begin{center}
+\begin{block}{}
 alert http \textcolor{blue}{any any}  $\rightarrow$ \textcolor{blue}{any any} (msg:""; content:"inria.fr";)
-\end{center}
+\end{block}
 Source/Destination Port :
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
@@ -140,9 +158,9 @@ Source/Destination Port :
 %9 eme page : Exemple de regles (Motif)
 \begin{frame}
 \frametitle{Fonctionnement des règles de matching}
-\begin{center}
+\begin{block}{}
 alert http any any $\rightarrow$ any any (msg:""; \textcolor{cyan}{content:"inria.fr";})
-\end{center}
+\end{block}
 \begin{center}
 Motif
 \end{center}
@@ -151,9 +169,9 @@ Motif
 %10 eme page : Exemple de regles (autre parametres)
 \begin{frame}
 \frametitle{Fonctionnement des règles de matching}
-\begin{center}
+\begin{block}{}
 alert http any any $\rightarrow$ any any (\textcolor{cyan}{msg:"";} content:"inria.fr";)
-\end{center}
+\end{block}
 Autres paramètres :
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
@@ -164,15 +182,44 @@ Autres paramètres :
 \end{frame}
 
 % Partie III
-%11 eme page : Fonctionnalitée avancée.
+%11 eme page : Flowint
 \section{Fonctionnalité avancée}
+\subsection{Flowint}
+\begin{frame}
+\frametitle{Flowint}
+\begin{block}{Initialisation d'une variable}
+alert tcp any any $ \Rightarrow $ any any (msg: "Start a login count"; content: "login failed"; flowint: loginfailed, notset; flowint: loginfail, =, 1; sid:999997; rev:5;)
+\end{block}
+\pause
+\begin{block}{Incrémentation d'une variable}
+alert tcp any any $ \Rightarrow $ any any (msg: "Counting Logins"; content: "login failed"; flowint: loginfailed, isset; flowint: loginfail, +, 1;)
+\end{block}
+\end{frame}
+
+
+%12 eme page : Fonctionnalitée avancée. LibHtp
 \subsection{libhtp}
 \begin{frame}
 \frametitle{Suricata et LibHtp}
-\begin{itemize}
-\item Capable de décoder des flux compressé par Gzip.
-\item flow:to\_client; content:"Inria recrute"; nocase; $ \Rightarrow $ Page web non compressé.
-\end{itemize}
+Capable de décoder des flux compressés par Gzip
+\begin{block}{Page non compressée}
+alert http 128.93.162.84 any -> any any (msg:"LOCAL Flux depuis inria.fr mot clé (http)"; flow:to\_client; content:"Inria recrute"; nocase; sid:999992; rev:5;)
+\end{block}
+\begin{block}{Page compressée}
+alert http any any -> any any (msg:"LOCAL Flux depuis UGA mot clé (http)"; flow:to\_client; content:"est astrophysicien"; http\_server\_body; nocase; sid:999990; rev:5;)
+\end{block}
 \end{frame}
+
+%13 eme page : Décompression de fichiers
+\subsection{Fichiers}
+\begin{frame}
+\frametitle{Décompression de fichiers}
+Extraction et inspection des fichiers compressé.
+\begin{block}{Règle de base}
+alert http any any -> any any (msg:"FILE store all"; filestore; sid:1; rev:1;)
+\end{block}
+\end{frame}
+
+
 
 \end{document}

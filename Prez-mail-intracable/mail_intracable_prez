@@ -1,0 +1,190 @@
+- Serveurs de mail anonyme :
+	Ce type de serveurs permettent de retransmettre un mail de facon à masquer l'identité de l'expediteur. D'abord ces serveur retirent l'information contenu dans l'entete du mesage qui pourrait identifier sont origine. Du point de vu du destinataire, les messages recu semble provenir du serveur de mail anonyme.
+	Trois type de serveurs :
+		- Cypherpunk (type I) :
+			Recois les messages chiffré (ou non) remplace le destinataire du mail par une pseudo-entete identifiant le destinataire final.
+		- Mixmaster (Type II) :
+			Les messages sont divisé en plusieurs paquets de données de taille égale qui seront envoyés dans le réseau de serveurs.
+		- Mixminion (Type III) :
+			Ce base sur le type precedent mais en rajoutant le fait de pouvoir répondre. Il semblerait que se soit encore en développement.
+
+Signature a l'aveugle
+	Il s'agit d'une signature effectuée sur un document dont le contenu a été caché avant d'etre signé. De maniere  a ce que le signatire ne puisse pas prendre connaissance du contenu. De fait, l'auteur du document et le signataire ne sont pas la meme personne. La signature resultante peut etre publiquement verifié avec le documet original.
+	- Applications :
+		- Vote electronique
+		- Porte monnaie electronique.
+
+Mix network					=> Tor
+	C'est une famille de modes de routage favorisant l'anonymat par l'usage de serveurs intermediares multiples re-routant l'informations sans avoir acces a celle ci, ni connaitre son origines ou sa destination finale.
+	- Applications :
+		- Projet Tor
+		- Serveur Mixmaster (cf. serveurs de mail anonyme)
+
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+
+Mail system :
+Alice veut envoyé un message M a bob.
+- Alice chiffre le message M avec la clé publique de Bob.
+- Ensuite alice ajoute l'adresse de Bob au résultat.
+- Puis alice chiffre le tout avec la clé publique K1 du serveur de mix (cypherpunk)
+
+K1( R1, Ka( R0, M ), A ) --> Ka( R0, M ), A.
+
+Le serveur de mix déchiffre le contenu avec sa clé privée. Jette la chaine aleatoire R1 et delivre le reste.
+Le but d'un serveur de mix est de cacher les correspondances entre les éléments a son entrée et ceux de sa sortie.
+L'ordre d'arrivée est caché en fournissant en sortie les elements de taille uniforme dans l'ordre lexicographique ordonné.
+Si un seul element est repeté en entrée et autorisé a etre repeté en sortie alors la correspondance est revelé pour cet element.
+
+Ainsi, une fonction importante du mix est de faire en sorte qu'aucun élément ne soit traité plusieurs fois. Cette fonction peut être facilement atteint par un mix pour un lot particulier en supprimant les copies redondantes avant la sortie du lot. Si un seul mix est utilisé pour plusieurs lots, puis d'une manière qui se répète à travers les lots peut être détecté pour le mix à tenir un registre des éléments utilisés dans les lots précédents. (Les enregistrements peuvent être jetés une fois un mix change de clé publique, par exemple, en annonçant la nouvelle clé dans un communiqué signé avec sa clé privée ancienne.) Un mix n'a pas besoin de conserver des lots précédents si une partie de chaque chaîne aléatoire R1 contient quelque chose - par exemple comme un horodatage - qui est seulement valable pour un lot particulier.
+
+Si un participant reçoit des reçus signés pour les messages qu'il soumet à un mix, le participant peut fournir des preuves substantielles que le mix n'a pas réussi à sortir un article correctement. Seul un participant lésé peut fournir le reçu Y (= Inv (K1) (C, K1 (R1, Ka (R0, M), A))), la sortie manquante X (= Ka (R0, M), A), et la chaîne de retenue R1, de telle sorte que K1 (Y) = C, K1 (R1, X). Parce qu'un mix signera chaque lot de sortie dans son ensemble, l'absence d'un élément X à partir d'un lot peut être étayée par une copie du lot signé.
+
+L'utilisation d'une "cascade", ou une série de mix, offre l'avantage que tout mélange constituant unique est en mesure de fournir le secret de la correspondance entre les entrées et les sorties de l'ensemble de la cascade. Incrimination d'un mélange particulier d'une cascade qui a échoué à traiter correctement un élément est réalisé comme un seul mélange, mais exige seulement un reçu du premier mélange de la cascade, car un mélange peut utiliser la sortie signée de son prédécesseur pour montrer la absence d'un élément de sa propre entrée. Un élément est préparé pour une cascade de n mixe le même que pour un seul mélange. Il est ensuite successivement scellé pour chaque mélange suivant :
+
+Kn( Rn, K<n-1>( R<n-1>, ... , K2( R2, K1( R1, Ka( R0, M ), A ))...)) -->.
+
+K<n-1>( R<n-1>, ... , K2( R2, K1( R1, Ka( R0, M ), A ))...) -->.
+
+Les articles dans le lot final de sortie d'une zone en cascade de la forme Ka (R0, M), A, les mêmes que celles d'un seul mélange.
+
+-------------------------------------------------------------------------------------------------------------------
+
+Return Addresses:
+Les techniques qui viennent d'être décrites permettent au participant x d'envoyer des messages anonymes au participant y. Ce qu'il faut maintenant c'est  de trouver un moyen pour y répondre. Tout en gardant l'identité de x secret pour y. Une solution est que x pour forme une adresse K1 retour introuvable (R1, Ax), Kx, où Ax est sa propre adresse réelle, Kx est une clé publique choisie pour l'occasion, et R1 est une clé qui agira également comme une chaîne aléatoire à des fins d'étanchéité. Ensuite, x peut envoyer cette adresse de retour à y dans le cadre d'un message envoyé par les techniques déjà décrites. (En général, les deux participants peuvent échanger des adresses de retour à travers une chaîne d'autres participants, au moins un membre de chaque paire adjacente connaît l'identité de l'autre membre la paire.) Le tableau suivant indique comment y utilise cette adresse de retour intraçable pour former une réponse à x, par l'intermédiaire d'un nouveau type de mélange :
+
+K1( R1, Ax ), Kx( R0, M ) --> Ax, R1( Kx( R0, M )).
+
+Ce mix utilise la chaîne de bits R1 qu'elle trouve après le déchiffrage du Adresse partie K1 (R1, Ax) comme une clé pour re-chiffrer la partie de message Kx (R0, M). Seul le destinataire x peut déchiffrer la sortie résultante parce que x créé R1 et Kx. Le mix ne doit pas permettre à l'adresse pièces à répéter - pour la même raison que les articles d'un mail ne doit pas être répétée. Cela signifie que x doit fournir a y un retour adresse pour chaque mail que x souhaite recevoir. Notez également que classique, par opposition à la cryptographie à clé publique peut être utilisé pour les deux cryptages de M.
+
+Avec une cascade de mix, la partie message est préparé le même que pour un seul mélange, et la partie d'adresse est comme indiqué ci-après contribution:
+
+K1( R1, K2( R2, ..., K<n-1>( R<n-1>, Kn( Rn, Ax ))...)), Kx( R0, M ) -->.
+
+Le resultat du premier mix :
+
+K2( R2, ..., K<n-1>( R<n-1>, Kn( Rn, Ax ))...), R1( Kx( R0, M )) -->,
+
+Et le resultat final a n-1 mix :
+
+Ax, Rn( R<n-1> ... R2( R1( Kx( R0, M )))...).
+
+Les adresses de retour intracable permettent la possibilité de mail "certifié": Ils peuvent fournir à l'expéditeur d'une lettre anonyme avec un accusé de réception attestant du fait que la lettre est apparue intacte dans la dernière lot sortie. L'adresse A qui est incorporé dans un certifié lettre est élargi pour inclure non seulement l'adresse habituelle du destinataire, mais aussi une adresse de retour introuvable pour l'expéditeur. Lorsque cette adresse de retour apparaît dans la sortie du lot de mixage final, il est utilisé pour envoyer à l'expéditeur un reçu signé qui comprend le message ainsi que l'adresse à laquelle il a été livré. Le ticket de caisse peut être signé par chaque mélange.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Digital Pseudonyms
+
+Un "pseudonyme" numérique est une clé publique utilisée pour vérifier les signatures effectuées par le titulaire anonyme de la clé privée correspondante. Une "liste", ou une liste de pseudonymes, est créé par une autorité qui décide quel demandes de pseudonymes à accepter, mais est incapable de tracer la pseudonymes dans la liste remplie. Les demandes peuvent être envoyées à l'autorité anonyme, par courrier intraçable, par exemple, ou ils on peut prévoir une autre façon.
+
+Chaque demande reçue par l'autorité contient toutes les les informations nécessaires à la décision d'acceptation et un spécial lettre numérique non adressée (dont les messages est la clé publique K, le pseudonyme proposé du demandeur.) Dans le cas d'un seul mélange, ceux-ci
+lettres sont de la forme K1 (R1, K). Pour une cascade de n mélanges, ils sont de la forme Kn (Rn, ..., K2 (R2, K1 (R1, K)) ...). L'autorité
+formeront un lot d'entrée ne contenant que les lettres sans adresse des applications qu'il accepte. Ce lot d'entrée sera fourni à une cascade spéciale dont le lot résultat final sera publiquement disponible. Etant donné que chaque entrée dans le lot final de sortie de la cascade est une clé publique K d'un candidat accepté, la sortie signée du mix final est une liste de pseudonymes numériques.
+
+Notification des candidats peut être accompli en formant également une liste pour les applications non acceptées, puis en utilisant la technique de courrier certifié pour retourner un seul lot de reçus pour les deux ensembles de candidats. Bien entendu, les répétitions ne doivent pas être autorisés à l'intérieur ou à travers lots.
+
+Si les électeurs inscrits sont acceptées pour une liste particulière, il peut être utilisé pour mener à bien une élection. Pour un seul mélange, chaque électeur soumet un bulletin de vote de la forme K1 (R1, K, Inv (K) (C, V)), où K est pseudonyme et V de l'électeur est le vote réel. Pour une cascade de mélanges, les bulletins de vote sont de la forme Kn (Rn, ..., K2 (R2, K1 (R1, K, Inv (K) (C, V))) ...). Les bulletins de vote doivent être traités comme un seul lot, de même que les lettres utilisées pour former listes. Articles dans le lot de sortie lexicographique ordonnée finale sont de la forme K, Inv (K) (C, V). Depuis la liste des inscrits les électeurs sont également commandés sur K, il est facile pour quiconque de compter les votes en faisant un seul passage à travers les deux lots à la fois. Chaque bulletin est compté seulement après avoir vérifié que le pseudonyme K qui forme son préfixe, se trouve aussi dans la liste et que le pseudonyme déchiffre correctement le vote V signé.
+
+Un individu peut être connu à une organisation que par un pseudonyme qui apparaît dans une liste de clients acceptables. Les clients peuvent
+correspondent avec l'organisation par courrier intraçable et organisation peut correspondre avec les clients en utilisant le retour introuvable
+adresses. Si les candidats s'identifient dans leurs applications, ou si elles signent des applications avec des pseudonymes qui apparaissent dans une liste délivré par une autorité qui exige l'identification, la l'organisation est assuré que le même client ne peut pas venir à sous
+différents pseudonymes. Dans des circonstances particulières, telles que par défaut paiement, un pseudonyme particulier pourrait être représenté pour correspondre à une application particulière (sans révéler d'autres correspondances) de chaque mélange à son tour fourni la Rn appropriée.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+General Purpose Mail Systems
+
+Une façon de construire un objectif général, le système de messagerie intracable exige que chaque message passe à travers une cascade. Bien sûr, les mélanges peut fonctionner en continu ou périodiquement, et de longs messages seront chiffrés en premier et ensuite divisé en plusieurs éléments. Afin de cacher le nombre de messages envoyés, chaque participant fournit le même nombre des messages à chaque lot (dont certains pourraient être traités de manière aléatoire naivement). Afin de cacher le nombre de messages reçus, chaque participant recherches en secret la totalité de la production pour les messages qui lui sont dirigés.
+
+Un tel système peut se révéler trop coûteux pour certains participants. Une façon de réduire le coût est de permettre aux mail d'etre adresser aux sous-ensembles des participants, comme un réseau local. Les participants qui tirent parti de tels arrangements doivent rechercher uniquement le courrier adressé à un sous-ensemble notamment. Une autre façon d'économiser est qu'un participant envoie, pour chaque lot seulement le nombre de messages fictifs suggérés par la valeur aléatoire (choisi parmi une distribution appropriée), par opposition à
+toujours l'envoi du nombre maximal de messages. Cela peut sensiblement réduire le trafic de messages et, par conséquent, la taille des lots de production. Bien que ces techniques peuvent ouvrir la porte à certains types d'attaque, la taille du système qui leur est nécessaire peut réduire l'efficacité de ces attaques.
+
+Dans un grand système de messagerie, à usage général avec beaucoup de mélanges, il peut être impraticable pour chaque message de passer à travers tous les mix. Dans un tel cas, une séquence de mélanges sera sélectionné pour chaque message, peut-être la base de la topologie du réseau ou de confiance. Notez que si un participant peut choisir des mélanges, il fait confiance à ses données sur le volume de trafic le plus tôt membres de ses séquences, ces mélanges peuvent jeter des dummies qu'ils recevoir du participant et d'offrir de petits lots, de taille fixe (bourré avec des dummies) directement au participant.
+
+Un nouveau type de mélange sera présenté ici qui permet une séquence de mixages être sélectionné pour chaque message. Elle aussi (a) cache le nombre et l'identité des mélanges dont un message doit passer à travers, (b) permet l'incrimination d'un mélange qui n'a pas correctement les articles avant, et (c) ne fait aucune distinction entre un mail normal et un mail envoyé par intraçable adresse de retour. Il est basé sur l'idée que chaque élément du mail est composée du même nombre de blocs de taille fixe.
+
+Les opérations effectuées par ce nouveau type de mélange sont toujours les mêmes. D'abord, il supprime le premier bloc et ajoute un bloc J aléatoire à la fin, afin de maintenir la longueur de l'élément de l blocs. Puis, en utilisant la une clé privée, le mélange déchiffre le bloc enlevé lors de la première étape. On obtient ainsi une clé R, le mélange utilise pour chiffrer chacun des L blocs de l'élément (en utilisant soit la clé publique ou conventionnelle cryptographie). Il donne également l'adresse A (soit d'un destinataire ou d'un autre mix) à laquelle l'article sera transmis.
+
+Le côté gauche de l'exemple suivant montre comment un élément est prêt à passer à travers un mélange unique:
+
+K2( R2, ..., K<n-1>( R<n-1>, Kn( Rn, Ax ))...), R1( Kx( R0, M )) -->,
+
+A1: [K<A1>( R<A1>, A )], [Inv(R<A1>)( M1 )], [Inv(R<A1>)( M2 )], ...
+    [Inv(R<A1>)( M<l-1> )] --> A: [M1],...[M<l-1], [R<A1>( J<A1> )].
+
+où crochets montrent l'étendue de chaque bloc, et scellés un message Ka (R0, M) est divisé en morceaux Mi, de telle sorte que Ka (R0, M) = M1, M2, ..., M <l-n>. L'A1: indique que le côté gauche est délivré à mélanger A1, tandis que le R: signifie que le côté droit est livré à traiter A. Articles avec le même premier bloc doit être considéré comme répétitions.
+
+A message prepared to be passed through mixes A1 through An has the form
+
+A1: [K<A1>( R<A1>, A2 )], [Inv(R<A1>)( K<A2>( R<A2>, A3 ))], ...,
+    [Inv(R<A1>)( Inv(R<A2>) ... Inv(R<A<n-1>>)( K<An>( R<An, A )) ... )],
+    [Inv(R<A1>)( Inv(R<A2>) ... Inv(R<An>)( M1 )...)], ...,
+    [Inv(R<A1>)( Inv(R<A2>) ... Inv(R<An>)( M<l-n> )...)]  -->.
+The result leaving A1 is
+A2: [K<A2>( R<A2, A3 )], [Inv(R<A2>)( K<A3>( R<A3>, A4 ))], ...,
+    [Inv(R<A2>)( Inv(R<A3>) ... Inv(R<A<n-1>>)( K<An>( R<An, A )) ... )],
+    [Inv(R<A2>)( Inv(R<A3>) ... Inv(R<An>)( M1 )...)], ...,
+    [Inv(R<A2>)( Inv(R<A3>) ... Inv(R<An>)( M<l-n> )...)],
+    [R<A1>( J<A1> )] -->,
+and the final result leaving An is
+A:  [M1], [M2], ..., [M<l-n>],
+    [R<An>( R<A<n-1>> ... R<A1>( J<A1> )...)], ..., [R<An>( J<An> )].
+
+Un mélange intermédiaire sait toujours quelle combinaison il a reçu son entrée à partir - par hypothèse (2) - mais si un mix diffuse des copies de sa taille fixe lots de sortie, seuls les mélanges de bénéficiaires individuels ont besoin d'être en mesure de reconnaître leur propre entrée dans un lot de diffusion. L'adresse de retour intraçable x envoyé à y contient la clé Kx que y utilise pour chiffrer la partie de message. Elle comprend également, dans le cas d'un mélange unique, ce que y va utiliser le premier bloc de l'élément qu'il soumet au mélange:
+
+A1: [K<A1>( R<A1>, Ax )], [M1], ..., [M<l-1>]  -->
+
+Ax: [R<A1>( M1 )], ..., [R<A1>( M<l-1> )], [R<A1>( J<A1> )],
+
+where Kx( R0, M ) = M1, M2, ..., M<l-n>.  Only x can decrypt the item it receives since it created R<A1> and Kx.  When a message is to pass
+through n mixes, the untraceable return address contains the first n blocks:
+
+A1: [K<A1>( R<A1>, A2 )], [Inv(R<A1>)( K<A2>( R<A2>, A3 ))], ...,
+    [Inv(R<A1>)( Inv(R<A2>) ... Inv(R<A<n-1>>)( K<An>( R<An>, Ax ))...)],
+    [M1], [M2], ..., [M<l-n>]  -->.
+
+After being operated on by mix A1 it will have the form
+
+A2: [K<A2>( R<A2>, A3 )], ...,
+    [Inv(R<A2>)( Inv(R<A3>) ... Inv(R<A<n-1>>)( K<An>( R<An>, Ax ))...)],
+    [R<A1>( M1 )], [R<A1>( M2 )], ..., [R<A1>( M<l-n> )],
+    [R<A1>( J<A1> )] -->,
+
+and the final result leaving An is
+
+Ax: [R<An>( R<A<n-1>> ... R<A1>( M1 )...)], ...,
+    [R<An>( R<A<n-1>> ... R<A1>( M<l-n> )...)],
+    [R<An>( R<A<n-1>> ... R<A1>( J<A1> )...)], ..., [R<An>( J<An> )].
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+Résumé et conclusion
+
+Une solution au problème de l'analyse du trafic a été présenté qui permet à tout intermédiaire d'assurer la sécurité pour les messages
+qui la traverse. En outre, la solution permet aux messages d'être envoyé ou reçu un pseudonyme. Grâce à l'idée d'une liste de pseudonymes, il fournit également des nouvelles et intéressantes sortes de limitée anonymat.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

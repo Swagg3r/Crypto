@@ -1,3 +1,9 @@
+Questions :
+ - Les mails anonymes sont divisé en plusieurs messages et diffusé sur différents serveurs ?
+   - Différence avec la cascade ? iteneraire choisi des le debut ou defini au fur et a mesure ?
+ - La signature des messages.
+
+
 - Serveurs de mail anonyme :
 	Ce type de serveurs permettent de retransmettre un mail de facon à masquer l'identité de l'expediteur. D'abord ces serveur retirent l'information contenu dans l'entete du mesage qui pourrait identifier sont origine. Du point de vu du destinataire, les messages recu semble provenir du serveur de mail anonyme.
 	Trois type de serveurs :
@@ -20,6 +26,11 @@ Mix network					=> Tor
 		- Projet Tor
 		- Serveur Mixmaster (cf. serveurs de mail anonyme)
 
+-------------------------------------------------------------------------------------------------------------------
+Hypotheses :
+(1) Personne ne peut déterminer quoi que ce soit sur les correspondances entre un ensemble d'éléments chiffrés et l'ensemble des éléments non chiffrés, ou créer des contrefaçons sans la chaîne aléatoire appropriée ou la clé privée.
+
+(2) Toute personne peut apprendre l'original, la(les) destination(s), et la représentation des tous les messages dans le système de télécommunication sous-jacent et n'importe qui peut injecter, supprimer ou modifier des messages.
 
 
 -------------------------------------------------------------------------------------------------------------------
@@ -38,11 +49,11 @@ Le but d'un serveur de mix est de cacher les correspondances entre les élément
 L'ordre d'arrivée est caché en fournissant en sortie les elements de taille uniforme dans l'ordre lexicographique ordonné.
 Si un seul element est repeté en entrée et autorisé a etre repeté en sortie alors la correspondance est revelé pour cet element.
 
-Ainsi, une fonction importante du mix est de faire en sorte qu'aucun élément ne soit traité plusieurs fois. Cette fonction peut être facilement atteint par un mix pour un lot particulier en supprimant les copies redondantes avant la sortie du lot. Si un seul mix est utilisé pour plusieurs lots, puis d'une manière qui se répète à travers les lots peut être détecté pour le mix à tenir un registre des éléments utilisés dans les lots précédents. (Les enregistrements peuvent être jetés une fois un mix change de clé publique, par exemple, en annonçant la nouvelle clé dans un communiqué signé avec sa clé privée ancienne.) Un mix n'a pas besoin de conserver des lots précédents si une partie de chaque chaîne aléatoire R1 contient quelque chose - par exemple comme un horodatage - qui est seulement valable pour un lot particulier.
+Ainsi, une fonction importante du mix est de faire en sorte qu'aucun élément ne soit pas traité plusieurs fois. Cette fonction peut être facilement atteint par un mix pour un lot particulier en supprimant les copies redondantes avant la sortie du lot. Si un seul mix est utilisé pour plusieurs lots, puis d'une manière qui se répète à travers les lots peut être détecté pour le mix à tenir un registre des éléments utilisés dans les lots précédents. (Les enregistrements peuvent être jetés une fois un mix change de clé publique, par exemple, en annonçant la nouvelle clé dans un communiqué signé avec sa clé privée ancienne.) Un mix n'a pas besoin de conserver des lots précédents si une partie de chaque chaîne aléatoire R1 contient quelque chose - par exemple comme un horodatage - qui est seulement valable pour un lot particulier.
 
 Si un participant reçoit des reçus signés pour les messages qu'il soumet à un mix, le participant peut fournir des preuves substantielles que le mix n'a pas réussi à sortir un article correctement. Seul un participant lésé peut fournir le reçu Y (= Inv (K1) (C, K1 (R1, Ka (R0, M), A))), la sortie manquante X (= Ka (R0, M), A), et la chaîne de retenue R1, de telle sorte que K1 (Y) = C, K1 (R1, X). Parce qu'un mix signera chaque lot de sortie dans son ensemble, l'absence d'un élément X à partir d'un lot peut être étayée par une copie du lot signé.
 
-L'utilisation d'une "cascade", ou une série de mix, offre l'avantage que tout mélange constituant unique est en mesure de fournir le secret de la correspondance entre les entrées et les sorties de l'ensemble de la cascade. Incrimination d'un mélange particulier d'une cascade qui a échoué à traiter correctement un élément est réalisé comme un seul mélange, mais exige seulement un reçu du premier mélange de la cascade, car un mélange peut utiliser la sortie signée de son prédécesseur pour montrer la absence d'un élément de sa propre entrée. Un élément est préparé pour une cascade de n mixe le même que pour un seul mélange. Il est ensuite successivement scellé pour chaque mélange suivant :
+L'utilisation d'une "cascade", ou une série de mix, offre l'avantage que tout mélange constituant unique est en mesure de fournir le secret de la correspondance entre les entrées et les sorties de l'ensemble de la cascade. Incrimination d'un mélange particulier d'une cascade qui a échoué à traiter correctement un élément est réalisé comme un seul mélange, mais exige seulement un reçu du premier mélange de la cascade, car un mélange peut utiliser la sortie signée de son prédécesseur pour montrer l'absence d'un élément de sa propre entrée. Un élément est préparé pour une cascade de n mixe le même que pour un seul mélange. Il est ensuite successivement scellé pour chaque mélange suivant :
 
 Kn( Rn, K<n-1>( R<n-1>, ... , K2( R2, K1( R1, Ka( R0, M ), A ))...)) -->.
 
@@ -53,7 +64,7 @@ Les articles dans le lot final de sortie d'une zone en cascade de la forme Ka (R
 -------------------------------------------------------------------------------------------------------------------
 
 Return Addresses:
-Les techniques qui viennent d'être décrites permettent au participant x d'envoyer des messages anonymes au participant y. Ce qu'il faut maintenant c'est  de trouver un moyen pour y répondre. Tout en gardant l'identité de x secret pour y. Une solution est que x pour forme une adresse K1 retour introuvable (R1, Ax), Kx, où Ax est sa propre adresse réelle, Kx est une clé publique choisie pour l'occasion, et R1 est une clé qui agira également comme une chaîne aléatoire à des fins d'étanchéité. Ensuite, x peut envoyer cette adresse de retour à y dans le cadre d'un message envoyé par les techniques déjà décrites. (En général, les deux participants peuvent échanger des adresses de retour à travers une chaîne d'autres participants, au moins un membre de chaque paire adjacente connaît l'identité de l'autre membre la paire.) Le tableau suivant indique comment y utilise cette adresse de retour intraçable pour former une réponse à x, par l'intermédiaire d'un nouveau type de mélange :
+Les techniques qui viennent d'être décrites permettent au participant x d'envoyer des messages anonymes au participant y. Ce qu'il faut maintenant c'est  de trouver un moyen pour y répondre. Tout en gardant l'identité de x secret pour y. Une solution est que x forme une adresse de retour introuvable K1(R1, Ax), Kx, où Ax est sa propre adresse réelle, Kx est une clé publique choisie pour l'occasion, et R1 est une clé qui agira également comme une chaîne aléatoire à des fins d'étanchéité. Ensuite, x peut envoyer cette adresse de retour à y dans le cadre d'un message envoyé par les techniques déjà décrites. (En général, les deux participants peuvent échanger des adresses de retour à travers une chaîne d'autres participants, au moins un membre de chaque paire adjacente connaît l'identité de l'autre membre la paire.) Le tableau suivant indique comment y utilise cette adresse de retour intraçable pour former une réponse à x, par l'intermédiaire d'un nouveau type de mélange :
 
 K1( R1, Ax ), Kx( R0, M ) --> Ax, R1( Kx( R0, M )).
 
@@ -78,11 +89,11 @@ Les adresses de retour intracable permettent la possibilité de mail "certifié"
 
 Digital Pseudonyms
 
-Un "pseudonyme" numérique est une clé publique utilisée pour vérifier les signatures effectuées par le titulaire anonyme de la clé privée correspondante. Une "liste", ou une liste de pseudonymes, est créé par une autorité qui décide quel demandes de pseudonymes à accepter, mais est incapable de tracer la pseudonymes dans la liste remplie. Les demandes peuvent être envoyées à l'autorité anonyme, par courrier intraçable, par exemple, ou ils on peut prévoir une autre façon.
+Un "pseudonyme" numérique est une clé publique utilisée pour vérifier les signatures effectuées par le titulaire anonyme de la clé privée correspondante. Une "liste", ou une liste de pseudonymes, est créé par une autorité qui décide quel demandes de pseudonymes à accepter, mais est incapable de tracer le pseudonymes dans la liste remplie. Les demandes peuvent être envoyées à l'autorité anonyme, par courrier intraçable, par exemple, ou ils on peut prévoir une autre façon.
 
-Chaque demande reçue par l'autorité contient toutes les les informations nécessaires à la décision d'acceptation et un spécial lettre numérique non adressée (dont les messages est la clé publique K, le pseudonyme proposé du demandeur.) Dans le cas d'un seul mélange, ceux-ci
+Chaque demande reçue par l'autorité contient toutes les les informations nécessaires à la décision d'acceptation et une lettre numérique spécial non adressée (dont les messages sont la clé publique K, le pseudonyme proposé du demandeur.) Dans le cas d'un seul mélange, ceux-ci
 lettres sont de la forme K1 (R1, K). Pour une cascade de n mélanges, ils sont de la forme Kn (Rn, ..., K2 (R2, K1 (R1, K)) ...). L'autorité
-formeront un lot d'entrée ne contenant que les lettres sans adresse des applications qu'il accepte. Ce lot d'entrée sera fourni à une cascade spéciale dont le lot résultat final sera publiquement disponible. Etant donné que chaque entrée dans le lot final de sortie de la cascade est une clé publique K d'un candidat accepté, la sortie signée du mix final est une liste de pseudonymes numériques.
+formera un lot d'entrée ne contenant que les lettres sans adresse des demandes qu'il accepte. Ce lot d'entrée sera fourni à une cascade spéciale dont le lot résultat final sera publiquement disponible. Etant donné que chaque entrée dans le lot final de sortie de la cascade est une clé publique K d'un candidat accepté, la sortie signée du mix final est une liste de pseudonymes numériques.
 
 Notification des candidats peut être accompli en formant également une liste pour les applications non acceptées, puis en utilisant la technique de courrier certifié pour retourner un seul lot de reçus pour les deux ensembles de candidats. Bien entendu, les répétitions ne doivent pas être autorisés à l'intérieur ou à travers lots.
 

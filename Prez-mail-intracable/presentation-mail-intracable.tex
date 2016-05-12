@@ -60,9 +60,9 @@
 \begin{block}{Hypothèse 1}
 Personne ne peut déterminer quoi que ce soit sur les correspondances entre un ensemble d'éléments chiffrés et l'ensemble des éléments non chiffrés, ou créer des contrefaçons sans la chaîne aléatoire appropriée ou la clé privée.
 \end{block}
-
-\begin{block}{}
-Hypothèse 2
+\pause
+\begin{block}{Hypothèse 2}
+Chaque serveurs connaît le serveur d'origine du message qu'il reçoit, ainsi que le/les destinataires. Chaque serveurs peuvent injecter, modifier, supprimer des messages.
 \end{block}
 
 \end{frame}
@@ -74,7 +74,7 @@ Hypothèse 2
 %6 eme page : 
 \subsection{Fonctionnement}
 \begin{frame}
-%\frametitle{Alice et Bob}
+\frametitle{Mail system}
 Alice souhaite envoyer un message à Bob :
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
@@ -120,15 +120,15 @@ $K1( R1, Ka( R0, M ), A ) \rightarrow \textcolor{blue}{Ka( R0, M ), A}.$
 
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
-\item Le serveur de mix déchiffre ce qu'il reçoit avec sa clé privée
-\item Puis enleve la chaine R1 et delivre le \textcolor{blue}{reste}
+\item Le serveur déchiffre ce qu'il reçoit avec sa clé privée
+\item Puis enlève la chaîne R1 et délivre le \textcolor{blue}{reste}
 \end{itemize}
 \end{frame}
 
-\subsection{Serveur de mix}
+\subsection{Serveur de mail anonyme}
 \begin{frame}
 %\frametitle{Alice et Bob}
-But d'un serveur de mix :
+But d'un tel serveur :
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
 \item Cacher les correspondances entre les éléments en entrée/sortie
@@ -217,6 +217,20 @@ $\textcolor{red}{K1( R1, Ax )}, Kx( R0, M ) \rightarrow Ax, R1( Kx( R0, M ))$
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+%\frametitle{}
+\begin{center}
+$K1( \textcolor{green}{R1}, Ax ), Kx( R0, M ) \rightarrow Ax, \textcolor{green}{R1}( Kx( R0, M ))$
+\end{center}
+\begin{itemize}
+\setbeamertemplate{itemize item}[triangle]
+\item \textcolor{blue}{$Kx( R0, M )$} est 
+\item \textcolor{red}{$K1( R1, Ax )$} est le chiffrement de l'adresse d'Alice + la clé R1
+ avec l'adresse publique du premier serveur
+\item \textcolor{green}{$R1$} est utilisé pour re-chiffré $Kx( R0, M )$
+\end{itemize}
+\end{frame}
+
 \subsection{En cascade}
 \begin{frame}
 \frametitle{En utilisant une cascade de serveurs}
@@ -236,7 +250,9 @@ Alice peut recevoir un accusé de réception sur le message qu'elle envoie à Bo
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
 \item L'adresse réelle d'Alice est étendu avec une autre adresse anonyme (pour Alice et Bob)
+\pause
 \item Envoi de l'accusé une fois que le dernier serveur a envoyé le message
+\pause
 	\begin{itemize}
 	\item Adresse de livraison du message
 	\item Le message
@@ -251,25 +267,50 @@ Alice peut recevoir un accusé de réception sur le message qu'elle envoie à Bo
 \section{Digital Pseudonyms}
 \subsection{Définition}
 \begin{frame}
-%\frametitle{1}
+\frametitle{Digital Pseudonyms}
 \begin{block}{Définition}
 Un "pseudonyme" numérique est une clé publique utilisée pour vérifier les signatures effectuées par le titulaire anonyme de la clé privée correspondante.
 \end{block}
+\pause
 \begin{block}{Comment ?}
-Une autorité est chargé de tenir a jour une liste de pseudonymes
+Une autorité est chargé de tenir à jour une liste de pseudonymes.
+\end{block}
+\pause
+\begin{block}{Pourquoi ?}
+Dialoguer avec une entité de manière anonyme tout en garantissant qu'on utilise pas plusieurs identités.
 \end{block}
 \end{frame}
 
+\subsection{Faire une demande}
 \begin{frame}
 %\frametitle{1}
 Chaque demande d'acceptation :
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
 \item Peut être soumis par le system de mail anonyme
-\item Doit contenir la clé publique et le pseudonyme souhaiter
+\item Doit contenir la clé publique et le pseudonyme souhaité
 \item Peut être pour une liste particulière soumise à un vote
-\item Peut être acceptée ou refusée par l’autorité
+\item Peut être acceptée ou refusée par une autorité
 \end{itemize}
+Une liste contenant les couples (pseudonyme, clé publique) est publié par cette autorité  
+\end{frame}
+
+\subsection{Élection}
+\begin{frame}
+%\frametitle{1}
+L'acceptation dans une liste particulière peut être soumise a un vote :
+\begin{itemize}
+\setbeamertemplate{itemize item}[triangle]
+\item Les autres membres de cette liste votent pour/contre
+\item Un vote est de la forme : $K1( R1, K, Inv(K)( C, V ))$
+\pause
+	\begin{itemize}
+		\item K = pseudonyme du votant
+		\item V son vote
+		\item Comptabilisé après avoir vérifié le pseudonyme du votant et la signature du vote
+	\end{itemize}
+\end{itemize}
+Une liste contenant les couples (pseudonyme, clé publique) est publié par cette autorité  
 \end{frame}
 
 
@@ -277,10 +318,42 @@ Chaque demande d'acceptation :
 % Partie V : General Purpose Mail Systems
 % General Purpose Mail Systems
 \section{General Purpose Mail Systems}
-\subsection{1}
+\subsection{Généralités}
 \begin{frame}
-\frametitle{1}
-1
+\frametitle{General Purpose Mail Systems}
+\begin{itemize}
+\setbeamertemplate{itemize item}[triangle]
+\item Chaque message devrait passer par une "cascade" de serveurs
+\item Les serveurs peuvent fonctionner de manière continue ou périodique
+\item Les messages (trop) longs sont divisés en plusieurs parties :
+	\begin{itemize}
+		\item $Ka( R0, M ) = M1, M2, ..., M<l-n>$
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\subsection{Alléger le coût}
+\begin{frame}
+%\frametitle{1}
+Un message qui passe par tous les serveurs intermédiaire possible a un coût non négligeable
+\begin{itemize}
+\setbeamertemplate{itemize item}[triangle]
+\item Manière 1 : sous-ensemble
+\item Manière 2 : valeur aléatoire
+\item Une séquence de serveur peut être définie pour un message
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+%\frametitle{1}
+Détail des formules pour trouver une séquence ?
+\end{frame}
+
+\subsection{Conclusion}
+\begin{frame}
+\frametitle{Conclusion}
+Solution efficace pour sécurisé les messages contre l'analyse du trafic réseau.\\
+Permet également d'envoyer / recevoir des messages anonyme avec/sans pseudonyme.
 \end{frame}
 
 \end{document}

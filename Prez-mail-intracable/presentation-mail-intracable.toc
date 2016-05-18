@@ -1,0 +1,22 @@
+\beamer@endinputifotherversion {3.10pt}
+\select@language {french}
+\beamer@sectionintoc {1}{Introduction}{2}{0}{1}
+\beamer@subsectionintoc {1}{1}{L'analyse du trafic r\IeC {\'e}seaux}{2}{0}{1}
+\beamer@subsectionintoc {1}{2}{Notation utilis\IeC {\'e}e}{4}{0}{1}
+\beamer@subsectionintoc {1}{3}{Hypoth\IeC {\`e}ses}{8}{0}{1}
+\beamer@sectionintoc {2}{Mail system}{10}{0}{2}
+\beamer@subsectionintoc {2}{1}{Fonctionnement}{10}{0}{2}
+\beamer@subsectionintoc {2}{2}{Serveur de mix}{14}{0}{2}
+\beamer@sectionintoc {3}{Return addresses}{17}{0}{3}
+\beamer@subsectionintoc {3}{1}{Comment r\IeC {\'e}pondre ?}{17}{0}{3}
+\beamer@subsectionintoc {3}{2}{Nouveau type de messages}{20}{0}{3}
+\beamer@subsectionintoc {3}{3}{En cascade}{23}{0}{3}
+\beamer@subsectionintoc {3}{4}{Accus\IeC {\'e} de r\IeC {\'e}ception}{24}{0}{3}
+\beamer@sectionintoc {4}{Digital Pseudonyms}{25}{0}{4}
+\beamer@subsectionintoc {4}{1}{D\IeC {\'e}finition}{25}{0}{4}
+\beamer@subsectionintoc {4}{2}{Faire une demande}{28}{0}{4}
+\beamer@subsectionintoc {4}{3}{\IeC {\'E}lection}{29}{0}{4}
+\beamer@sectionintoc {5}{General Purpose Mail Systems}{31}{0}{5}
+\beamer@subsectionintoc {5}{1}{G\IeC {\'e}n\IeC {\'e}ralit\IeC {\'e}s}{31}{0}{5}
+\beamer@subsectionintoc {5}{2}{All\IeC {\'e}ger le co\IeC {\^u}t}{32}{0}{5}
+\beamer@subsectionintoc {5}{3}{Conclusion}{34}{0}{5}

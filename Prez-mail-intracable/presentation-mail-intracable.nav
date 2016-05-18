@@ -1,0 +1,88 @@
+\beamer@endinputifotherversion {3.10pt}
+\headcommand {\slideentry {0}{0}{1}{1/1}{}{0}}
+\headcommand {\beamer@framepages {1}{1}}
+\headcommand {\sectionentry {1}{Introduction}{2}{Introduction}{0}}
+\headcommand {\beamer@sectionpages {1}{1}}
+\headcommand {\beamer@subsectionpages {1}{1}}
+\headcommand {\beamer@subsectionentry {0}{1}{1}{2}{L'analyse du trafic r\IeC {\'e}seaux}}\headcommand {\beamer@subsectionpages {2}{1}}
+\headcommand {\slideentry {1}{1}{1}{2/3}{L'analyse du trafic r\IeC {\'e}seaux}{0}}
+\headcommand {\beamer@framepages {2}{3}}
+\headcommand {\beamer@subsectionentry {0}{1}{2}{4}{Notation utilis\IeC {\'e}e}}\headcommand {\beamer@subsectionpages {2}{3}}
+\headcommand {\slideentry {1}{2}{1}{4/7}{Notation utilis\IeC {\'e}e}{0}}
+\headcommand {\beamer@framepages {4}{7}}
+\headcommand {\beamer@subsectionentry {0}{1}{3}{8}{Hypoth\IeC {\`e}ses}}\headcommand {\beamer@subsectionpages {4}{7}}
+\headcommand {\slideentry {1}{3}{1}{8/9}{Hypoth\IeC {\`e}ses}{0}}
+\headcommand {\beamer@framepages {8}{9}}
+\headcommand {\sectionentry {2}{Mail system}{10}{Mail system}{0}}
+\headcommand {\beamer@sectionpages {2}{9}}
+\headcommand {\beamer@subsectionpages {8}{9}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{10}{Fonctionnement}}\headcommand {\beamer@subsectionpages {10}{9}}
+\headcommand {\slideentry {2}{1}{1}{10/10}{Fonctionnement}{0}}
+\headcommand {\beamer@framepages {10}{10}}
+\headcommand {\slideentry {2}{1}{2}{11/11}{Fonctionnement}{0}}
+\headcommand {\beamer@framepages {11}{11}}
+\headcommand {\slideentry {2}{1}{3}{12/12}{Fonctionnement}{0}}
+\headcommand {\beamer@framepages {12}{12}}
+\headcommand {\slideentry {2}{1}{4}{13/13}{Fonctionnement}{0}}
+\headcommand {\beamer@framepages {13}{13}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{14}{Serveur de mix}}\headcommand {\beamer@subsectionpages {10}{13}}
+\headcommand {\slideentry {2}{2}{1}{14/14}{Serveur de mix}{0}}
+\headcommand {\beamer@framepages {14}{14}}
+\headcommand {\slideentry {2}{2}{2}{15/15}{Serveur de mix}{0}}
+\headcommand {\beamer@framepages {15}{15}}
+\headcommand {\slideentry {2}{2}{3}{16/16}{Serveur de mix}{0}}
+\headcommand {\beamer@framepages {16}{16}}
+\headcommand {\sectionentry {3}{Return addresses}{17}{Return addresses}{0}}
+\headcommand {\beamer@sectionpages {10}{16}}
+\headcommand {\beamer@subsectionpages {14}{16}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{17}{Comment r\IeC {\'e}pondre ?}}\headcommand {\beamer@subsectionpages {17}{16}}
+\headcommand {\slideentry {3}{1}{1}{17/17}{Comment r\IeC {\'e}pondre ?}{0}}
+\headcommand {\beamer@framepages {17}{17}}
+\headcommand {\slideentry {3}{1}{2}{18/18}{Comment r\IeC {\'e}pondre ?}{0}}
+\headcommand {\beamer@framepages {18}{18}}
+\headcommand {\slideentry {3}{1}{3}{19/19}{Comment r\IeC {\'e}pondre ?}{0}}
+\headcommand {\beamer@framepages {19}{19}}
+\headcommand {\beamer@subsectionentry {0}{3}{2}{20}{Nouveau type de messages}}\headcommand {\beamer@subsectionpages {17}{19}}
+\headcommand {\slideentry {3}{2}{1}{20/20}{Nouveau type de messages}{0}}
+\headcommand {\beamer@framepages {20}{20}}
+\headcommand {\slideentry {3}{2}{2}{21/21}{Nouveau type de messages}{0}}
+\headcommand {\beamer@framepages {21}{21}}
+\headcommand {\slideentry {3}{2}{3}{22/22}{Nouveau type de messages}{0}}
+\headcommand {\beamer@framepages {22}{22}}
+\headcommand {\beamer@subsectionentry {0}{3}{3}{23}{En cascade}}\headcommand {\beamer@subsectionpages {20}{22}}
+\headcommand {\slideentry {3}{3}{1}{23/23}{En cascade}{0}}
+\headcommand {\beamer@framepages {23}{23}}
+\headcommand {\beamer@subsectionentry {0}{3}{4}{24}{Accus\IeC {\'e} de r\IeC {\'e}ception}}\headcommand {\beamer@subsectionpages {23}{23}}
+\headcommand {\slideentry {3}{4}{1}{24/24}{Accus\IeC {\'e} de r\IeC {\'e}ception}{0}}
+\headcommand {\beamer@framepages {24}{24}}
+\headcommand {\sectionentry {4}{Digital Pseudonyms}{25}{Digital Pseudonyms}{0}}
+\headcommand {\beamer@sectionpages {17}{24}}
+\headcommand {\beamer@subsectionpages {24}{24}}
+\headcommand {\beamer@subsectionentry {0}{4}{1}{25}{D\IeC {\'e}finition}}\headcommand {\beamer@subsectionpages {25}{24}}
+\headcommand {\slideentry {4}{1}{1}{25/27}{D\IeC {\'e}finition}{0}}
+\headcommand {\beamer@framepages {25}{27}}
+\headcommand {\beamer@subsectionentry {0}{4}{2}{28}{Faire une demande}}\headcommand {\beamer@subsectionpages {25}{27}}
+\headcommand {\slideentry {4}{2}{1}{28/28}{Faire une demande}{0}}
+\headcommand {\beamer@framepages {28}{28}}
+\headcommand {\beamer@subsectionentry {0}{4}{3}{29}{\IeC {\'E}lection}}\headcommand {\beamer@subsectionpages {28}{28}}
+\headcommand {\slideentry {4}{3}{1}{29/30}{\IeC {\'E}lection}{0}}
+\headcommand {\beamer@framepages {29}{30}}
+\headcommand {\sectionentry {5}{General Purpose Mail Systems}{31}{General Purpose Mail Systems}{0}}
+\headcommand {\beamer@sectionpages {25}{30}}
+\headcommand {\beamer@subsectionpages {29}{30}}
+\headcommand {\beamer@subsectionentry {0}{5}{1}{31}{G\IeC {\'e}n\IeC {\'e}ralit\IeC {\'e}s}}\headcommand {\beamer@subsectionpages {31}{30}}
+\headcommand {\slideentry {5}{1}{1}{31/31}{G\IeC {\'e}n\IeC {\'e}ralit\IeC {\'e}s}{0}}
+\headcommand {\beamer@framepages {31}{31}}
+\headcommand {\beamer@subsectionentry {0}{5}{2}{32}{All\IeC {\'e}ger le co\IeC {\^u}t}}\headcommand {\beamer@subsectionpages {31}{31}}
+\headcommand {\slideentry {5}{2}{1}{32/32}{All\IeC {\'e}ger le co\IeC {\^u}t}{0}}
+\headcommand {\beamer@framepages {32}{32}}
+\headcommand {\slideentry {5}{2}{2}{33/33}{All\IeC {\'e}ger le co\IeC {\^u}t}{0}}
+\headcommand {\beamer@framepages {33}{33}}
+\headcommand {\beamer@subsectionentry {0}{5}{3}{34}{Conclusion}}\headcommand {\beamer@subsectionpages {32}{33}}
+\headcommand {\slideentry {5}{3}{1}{34/34}{Conclusion}{0}}
+\headcommand {\beamer@framepages {34}{34}}
+\headcommand {\beamer@partpages {1}{34}}
+\headcommand {\beamer@subsectionpages {34}{34}}
+\headcommand {\beamer@sectionpages {31}{34}}
+\headcommand {\beamer@documentpages {34}}
+\headcommand {\def \inserttotalframenumber {26}}

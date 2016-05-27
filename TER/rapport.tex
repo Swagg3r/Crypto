@@ -1,0 +1,174 @@
+%				PLAN
+% 0. Abstract
+% 1. Intro
+% 2. IDS / Suricata
+% 3. Agregateur d'AV
+% 4. Framework : mastiff, viper, irma
+% 5. Conclu
+%
+%
+\RequirePackage{fix-cm}
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+\smartqed  
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\begin{document}
+
+\title{L'effet des bombes de compression sur les IDS / Antivirus}
+%\subtitle{Do you have a subtitle?\\ If so, write it here}
+
+%\titlerunning{Short form of title}        % if too long for running head
+
+\author{Monnet-Paquet Aurélien  \\ \and \\
+        Supervised by : Lauradoux Cédric
+}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{Monnet-Paquet Aurelien \at
+              Université Grenoble Alpes, 38400 Saint Martin d'Hères \\
+              \email{monnetpa@e.ujf-grenoble.fr}
+           \and
+           Lauradoux Cedric \at
+              Inria, 38334 Montbonnot\\
+              \email{cedric.lauradoux@inria.fr}
+}
+
+\date{Juin 2016}
+
+
+\maketitle
+
+\begin{abstract}
+Insert your abstract here. Include keywords, PACS and mathematical
+subject classification numbers as needed.
+\keywords{Bombe de compression \and IDS \and Antivirus \and Framework}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
+\section{Introduction}
+\label{intro}
+Your text comes here. Separate text sections with
+
+%-------------------------------------------------------------
+%	Partie IDS / Suricata
+%-------------------------------------------------------------
+\newpage
+\section{Les IDS : Sonde de détection d'intrusion}
+\label{sec1:ids}
+Text with citations \cite{Suricata} and \cite{virustotal}.
+
+\subsection{Présentation}
+\label{ids:présentation}
+as required. Don't forget to give each section
+and subsection a unique label (see Sect.~\ref{sec:1}).
+
+\subsection{Fonctionnement}
+\label{ids:fonctionnement}
+
+\subsection{Analyse}
+\label{ids:analyse}
+
+\subsection{Conclusion sur les IDS}
+\label{ids:conclusion}
+
+%-------------------------------------------------------------
+%	Partie Antivirus / agregateurs
+%-------------------------------------------------------------
+\newpage
+\section{Les sites web agrégateurs d'Antivirus}
+\label{sec2:agrégateurs}
+
+\subsection{Présentation}
+\label{agrégateurs:présentation}
+
+\subsection{Fonctionnement}
+\label{agrégateurs:fonctionnement}
+
+\subsection{Analyse}
+\label{agrégateurs:analyse}
+
+\subsection{Conclusion sur les agrégateurs}
+\label{agrégateurs:conclusion}
+
+%-------------------------------------------------------------
+%	Partie Framework : mastiff / viper / irma
+%-------------------------------------------------------------
+\newpage
+\section{Les Frameworks d'analyse de malwares}
+\label{sec3:frameworks}
+
+\subsection{Présentation}
+\label{frameworks:présentation}
+
+\subsection{Fonctionnement}
+\label{frameworks:fonctionnement}
+
+\subsection{Analyse}
+\label{frameworks:analyse}
+
+\subsection{Conclusion sur les frameworks}
+\label{frameworks:conclusion}
+
+
+%-------------------------------------------------------------
+%	Partie Conclusion
+%-------------------------------------------------------------
+\newpage
+\section{Conclusion}
+\label{sec4:conclusion}
+
+%\begin{acknowledgements}
+%If you'd like to thank anyone, place your comments here
+%and remove the percent signs.
+%\end{acknowledgements}
+
+% BibTeX users please use one of
+%\bibliographystyle{spbasic}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+%\bibliographystyle{spphys}       % APS-like style for physics
+%\bibliography{}   % name your BibTeX data base
+
+% Non-BibTeX users please use
+\newpage
+\begin{thebibliography}{}
+%
+% and use \bibitem to create references. Consult the Instructions
+% for authors for reference list style.
+
+\bibitem{PerformanceAnalysis}
+David J. Day et Benjamin M. Burns, "A Performance Analysis of Snort and Suricata Network Intrusion Detection and Prevention Engines"
+
+\bibitem{Suricata}
+oisf.net, The Open Information Security Foundation, organisation à but non lucrative qui développe et met à jour Suricata.
+
+\bibitem{SuricataDoc}
+redmine.openinfosecfoundation.org/projects/suricata/wiki/, la documentation pour utilisateurs et développeurs de Suricata.
+
+\bibitem{virustotal}
+virustotal.com, site agrégateurs d'antivirus, filière de Google.
+
+\bibitem{Jotti}
+virusscan.jotti.org
+
+\bibitem{Virscan}
+www.virscan.org
+
+\bibitem{Mastiff}
+www.korelogic.com
+
+\bibitem{Viper}
+www.viper.li
+
+\bibitem{Irma}
+irma.quarkslab.com
+
+
+\end{thebibliography}
+
+\end{document}
+% end of file template.tex
+

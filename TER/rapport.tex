@@ -4,7 +4,8 @@
 % 2. IDS / Suricata
 % 3. Agregateur d'AV
 % 4. Framework : mastiff, viper, irma
-% 5. Conclu
+% 5. Antivirus Linux
+% 6. Conclu
 %
 %
 \RequirePackage{fix-cm}
@@ -16,7 +17,8 @@
 
 \begin{document}
 
-\title{L'effet des bombes de compression sur les IDS / Antivirus}
+\title{Étude des fichiers compressé sur les moyens de protection défensifs}
+%L'effet des bombes de compression sur les IDS / Antivirus
 %\subtitle{Do you have a subtitle?\\ If so, write it here}
 
 %\titlerunning{Short form of title}        % if too long for running head
@@ -63,8 +65,7 @@ Text with citations \cite{Suricata} and \cite{virustotal}.
 
 \subsection{Présentation}
 \label{ids:présentation}
-as required. Don't forget to give each section
-and subsection a unique label (see Sect.~\ref{sec:1}).
+But : faire peter Suricata avec les bombes.
 
 \subsection{Fonctionnement}
 \label{ids:fonctionnement}
@@ -81,13 +82,41 @@ and subsection a unique label (see Sect.~\ref{sec:1}).
 \newpage
 \section{Les sites web agrégateurs d'Antivirus}
 \label{sec2:agrégateurs}
+%1 ere vague d'analyse avec le payload normal (base)
+%2 eme vague avec le payload en mode compressé pour analyser le taux de detection
+%3 eme vague les bombes de compressions.
+
+%Analyses des différences entre les même AV des différentes plates-formes.
 
 \subsection{Présentation}
 \label{agrégateurs:présentation}
+Dans cette section, nous allons analyser le comportement des agrégateurs d'antivirus que l'on peut trouver sur internet.\\
+Cette expérience portera sur 3 sites : 
+\begin{itemize}
+\item VirusTotal \cite{virustotal}
+\item Jotti \cite{Jotti}
+\item Virscan \cite{Virscan}
+\end{itemize}
+Nous allons tester chacun de ses sites en 3 étapes :
+\begin{itemize}
+\item 1. Analyse témoin : un fichier connu pour être malveillant
+\item 2. Analyse du même fichier dans différents formats de compression
+\item 3. Analyse des différentes bombes de compression
+\end{itemize}
+Le but de cette expérience est d'analyser le comportement de ses éléments sur les fichiers compressés.\\
+Est-ce que tous les format de compression sont supporté ?\\
+Le comportement des antivirus commun entre les sites sont ils similaire ?\\
+Est-ce que les bombes sont détectées ?\\
 
 \subsection{Fonctionnement}
 \label{agrégateurs:fonctionnement}
-
+VirusTotal est actuellement le site le plus populaire dans ce domaine. Il permet, à ce jour, d'analyser un fichier avec 57 antivirus différents. Il existe 3 manières pour soumettre un fichier :
+\begin{itemize}
+\item L'interface web
+\item L'API
+\item Recherche par hash (md5, sha-1, sha-256) 
+\end{itemize}
+Remarque : pour pouvoir utilisé l'API, il faut avoir un compte actif.
 \subsection{Analyse}
 \label{agrégateurs:analyse}
 
@@ -95,7 +124,7 @@ and subsection a unique label (see Sect.~\ref{sec:1}).
 \label{agrégateurs:conclusion}
 
 %-------------------------------------------------------------
-%	Partie Framework : mastiff / viper / irma
+%	Partie Framework : mastiff / viper / irma ?
 %-------------------------------------------------------------
 \newpage
 \section{Les Frameworks d'analyse de malwares}
@@ -113,13 +142,33 @@ and subsection a unique label (see Sect.~\ref{sec:1}).
 \subsection{Conclusion sur les frameworks}
 \label{frameworks:conclusion}
 
+%-------------------------------------------------------------
+%	Partie AV linux --
+%-------------------------------------------------------------
+\newpage
+\section{Les Antivirus Linux}
+\label{sec4:av}
+
+\subsection{Présentation}
+\label{av:présentation}
+
+\subsection{Fonctionnement}
+\label{av:fonctionnement}
+
+\subsection{Analyse}
+\label{av:analyse}
+
+\subsection{Conclusion sur les frameworks}
+\label{av:conclusion}
+
+
 
 %-------------------------------------------------------------
 %	Partie Conclusion
 %-------------------------------------------------------------
 \newpage
 \section{Conclusion}
-\label{sec4:conclusion}
+\label{sec5:conclusion}
 
 %\begin{acknowledgements}
 %If you'd like to thank anyone, place your comments here
@@ -152,10 +201,10 @@ redmine.openinfosecfoundation.org/projects/suricata/wiki/, la documentation pour
 virustotal.com, site agrégateurs d'antivirus, filière de Google.
 
 \bibitem{Jotti}
-virusscan.jotti.org
+virusscan.jotti.org, site agrégateurs d'antivirus, basé aux Pays-Bas.
 
 \bibitem{Virscan}
-www.virscan.org
+www.virscan.org, site agrégateurs d'antivirus, basé en chine.
 
 \bibitem{Mastiff}
 www.korelogic.com
@@ -166,6 +215,14 @@ www.viper.li
 \bibitem{Irma}
 irma.quarkslab.com
 
+\bibitem{Comodo}
+www.comodo.com
+
+\bibitem{Clamav}
+www.clamav.net
+
+%
+%http://www.av-comparatives.org/wp-content/uploads/2015/05/avc_linux_2015_en.pdf
 
 \end{thebibliography}
 

@@ -28,7 +28,7 @@
 \setbeamertemplate{itemize item}[triangle]
 \item Comment garder confidentiel qui parle avec qui et quand ?
 \pause
-\item Cryptographie à clé publique
+\item Comment se protéger de l'analyse du trafic réseaux ?
 \end{itemize}
 \end{frame}
 
@@ -36,6 +36,9 @@
 \subsection{Notation utilisée}
 \begin{frame}
 \frametitle{Notation}
+\begin{block}{}
+Une solution basée sur la cryptographie à clé publique
+\end{block}
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
 \item K $~~~~~~~$: Clé publique
@@ -46,7 +49,7 @@
 \pause
 \item R $~~~~~~~$: Une chaîne de bits aléatoire
 \pause
-\item Le chiffrement du message par la clé publique :
+\item Le chiffrement du message par la clé publique $K$ :
 \begin{center}
 \item $K( R, X )$
 \end{center}
@@ -80,7 +83,7 @@ Alice souhaite envoyer un message à Bob :
 \setbeamertemplate{itemize item}[triangle]
 \item Alice chiffre le message M avec la clé publique (Ka) de Bob
 \item Alice ajoute l'adresse (A) de Bob au résultat
-\item Alice chiffre le tout avec la clé publique (K1) du premier serveur de mix
+\item Alice chiffre le tout avec la clé publique (K1) du premier serveur
 \end{itemize}
 \end{frame}
 
@@ -91,7 +94,7 @@ Alice souhaite envoyer un message à Bob :
 \setbeamertemplate{itemize item}[triangle]
 \item Alice \textcolor{red}{chiffre} le message \textcolor{red}{M} avec la clé publique \textcolor{red}{(Ka)} de Bob
 \item Alice ajoute l'adresse (A) de Bob au résultat
-\item Alice chiffre le tout avec la clé publique (K1) du premier serveur de mix
+\item Alice chiffre le tout avec la clé publique (K1) du premier serveur
 \end{itemize}
 \begin{center}
 $K1( R1, $\textcolor{red}{$Ka( R0, M )$}$, A ) \rightarrow Ka( R0, M ), A.$
@@ -105,7 +108,7 @@ Alice souhaite envoyer un message à Bob :
 \setbeamertemplate{itemize item}[triangle]
 \item Alice chiffre le message M avec la clé publique (Ka) de Bob
 \item Alice \textcolor{blue}{ajoute} l'adresse \textcolor{blue}{(A)} de Bob au résultat
-\item Alice chiffre le tout avec la clé publique (K1) du premier serveur de mix
+\item Alice chiffre le tout avec la clé publique (K1) du premier serveur
 \end{itemize}
 \begin{center}
 $K1( $\textcolor{blue}{$R1, $}$Ka( R0, M )$\textcolor{blue}{$, A$}$ ) \rightarrow Ka( R0, M ), A.$
@@ -138,14 +141,21 @@ But d'un tel serveur :
 Si R1 contient un horodatage, le serveur ne conserve pas de copie des lots
 \end{frame}
 
-\begin{frame}
-%\frametitle{Alice et Bob}
-Signature
-\end{frame}
 
 \begin{frame}
-%\frametitle{Alice et Bob}
-Cascade
+\frametitle{Distribution en cascade}
+\begin{block}{Comment ?}
+\begin{itemize}
+\setbeamertemplate{itemize item}[triangle]
+\item Découper le message en parties égales
+\item Envoyer les morceaux aux serveurs
+\end{itemize}
+\end{block}
+
+Kn( Rn, K<n-1>( R<n-1>, ... , K2( R2, K1( R1, \textcolor{red}{C} , A ))...))\\
+$ $\\
+Avec C = \textcolor{red}{Ka( R0, M )}
+
 \end{frame}
 
 
@@ -201,7 +211,7 @@ $K1( R1, Ax ), \textcolor{blue}{Kx( R0, M )} \rightarrow Ax, R1( Kx( R0, M ))$
 \end{center}
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
-\item \textcolor{blue}{$Kx( R0, M )$} est 
+\item \textcolor{blue}{$Kx( R0, M )$} est notre message chiffré
 \end{itemize}
 \end{frame}
 
@@ -212,7 +222,7 @@ $\textcolor{red}{K1( R1, Ax )}, Kx( R0, M ) \rightarrow Ax, R1( Kx( R0, M ))$
 \end{center}
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
-\item \textcolor{blue}{$Kx( R0, M )$} est 
+\item \textcolor{blue}{$Kx( R0, M )$} est notre message chiffré
 \item \textcolor{red}{$K1( R1, Ax )$} est le chiffrement de l'adresse d'Alice + la clé R1 avec l'adresse publique du premier serveur
 \end{itemize}
 \end{frame}
@@ -224,9 +234,9 @@ $K1( \textcolor{green}{R1}, Ax ), Kx( R0, M ) \rightarrow Ax, \textcolor{green}{
 \end{center}
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
-\item \textcolor{blue}{$Kx( R0, M )$} est 
+\item \textcolor{blue}{$Kx( R0, M )$} est notre message chiffré
 \item \textcolor{red}{$K1( R1, Ax )$} est le chiffrement de l'adresse d'Alice + la clé R1
- avec l'adresse publique du premier serveur
+ avec la clé publique du premier serveur
 \item \textcolor{green}{$R1$} est utilisé pour re-chiffré $Kx( R0, M )$
 \end{itemize}
 \end{frame}
@@ -335,7 +345,7 @@ Une liste contenant les couples (pseudonyme, clé publique) est publié par cett
 \subsection{Alléger le coût}
 \begin{frame}
 %\frametitle{1}
-Un message qui passe par tous les serveurs intermédiaire possible a un coût non négligeable
+Un message qui passe par tous les serveurs intermédiaire a un coût non négligeable
 \begin{itemize}
 \setbeamertemplate{itemize item}[triangle]
 \item Manière 1 : sous-ensemble
@@ -344,10 +354,6 @@ Un message qui passe par tous les serveurs intermédiaire possible a un coût no
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-%\frametitle{1}
-Détail des formules pour trouver une séquence ?
-\end{frame}
 
 \subsection{Conclusion}
 \begin{frame}

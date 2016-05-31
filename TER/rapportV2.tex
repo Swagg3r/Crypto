@@ -1,0 +1,188 @@
+%				PLAN
+% 0. Abstract
+% 1. Intro
+% 2. Outils de sécurité
+% 	2.1 AV
+%	2.2 Aggregateurs
+%		2.2.1 Site web
+%		2.2.2 Framework
+%	2.3 IDS
+% 3. Test
+%	3.1 Protocole de test
+%	3.2 Resultats et observations
+% 4. Conclu
+
+\RequirePackage{fix-cm}
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+\smartqed  
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\begin{document}
+
+\title{Robustesse des outils de sécurité}
+%L'effet des bombes de compression sur les IDS / Antivirus
+%\subtitle{Do you have a subtitle?\\ If so, write it here}
+
+%\titlerunning{Short form of title}        % if too long for running head
+
+\author{Monnet-Paquet Aurélien  \\ \and \\
+        Supervised by : Lauradoux Cédric
+}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{Monnet-Paquet Aurelien \at
+              Université Grenoble Alpes, 38400 Saint Martin d'Hères \\
+              \email{monnetpa@e.ujf-grenoble.fr}
+           \and
+           Lauradoux Cedric \at
+              Inria, 38334 Montbonnot\\
+              \email{cedric.lauradoux@inria.fr}
+}
+
+\date{Juin 2016}
+
+
+\maketitle
+
+\begin{abstract}
+$ $\\
+%Présentation de l'étude du comportement des outils défensif appliqué à un environnement de fichiers compressé par différents types d'algorithmes.\\
+%Cette étude permettra d'analyser le comportement des outils lorsqu'ils sont soumis à des fichiers compressés.
+
+\keywords{Bombe de compression \and IDS \and VirusTotal \and Antivirus \and Framework de détection de malwares}
+\end{abstract}
+
+%-------------------------------------------------------------
+%	INTRODUCTION
+%-------------------------------------------------------------
+\section{Introduction}
+\label{intro}
+%Selon l'étude de McAfee/CSIS de 2014, les pertes économique dues à la cybercriminalité représente 445 milliards de dollars par an, avec des attaques en forte hausse.\\
+%Le but de ce rapport est d'analyser le comportement des outils défensifs sur les fichiers compressés.\\
+%Est-ce que tous les formats de compression sont supportés ?\\
+%Le comportement des antivirus commun entre les sites sont-ils similaire ?\\
+%Est-ce que les bombes sont détectées ?\\
+
+%-------------------------------------------------------------
+%	OUTILS DE SECURITE
+%-------------------------------------------------------------
+\section{Outils de sécurité}
+\label{2.Outils}
+
+\subsection{Antivirus}
+\label{2.1antivirus}
+
+\subsection{Agrégateurs}
+\label{2.2agrégateurs}
+
+\subsubsection{Sites web}
+\label{2.2.1sites}
+
+\subsubsection{Frameworks}
+\label{2.2.2frameworks}
+
+\subsection{IDS}
+\label{2.3ids}
+
+
+%-------------------------------------------------------------
+%	TESTs
+%-------------------------------------------------------------
+\section{Tests}
+\label{3.Tests}
+
+\subsection{Protocole de test}
+\label{3.1Protocole}
+Dans un premier temps, nous avons générer un fichier (payload via metasploit) connu pour être analyser comme un malware par la plupart des outils disponible sur le marché. Ensuite, pour chacun des outils, nous avons effectuer une analyse témoin. Cette analyse se compose du fichier générer précédemment ainsi que d'un fichier contenant uniquement des zéros et qui est donc complètement inoffensif.\\
+Dans un second temps, nous avons analyser les résultats de ses deux fichiers compressé dans différents formats.\\
+Et enfin, nous avons analyser l'impact des bombes de compression sur ses outils pour vérifier leur robustesse sur un éventuel déni de service.\\
+Pour rappel : lorsqu'un fichier compressé de petite taille (42 Ko) se décompresse en un autre fichier d'une taille très largement supérieur (4.5 Po), c'est ce qu'on appelle une bombe de compression (42.zip).\\
+$ $\\
+Nous avons réaliser les tests (et installer les outils nécessaires) sur une machine ayant un OS Linux (Ubuntu 12.04 LTS).\\
+Après avoir installer ClamAV (via les dépôts Ubuntu/Debian) nous avons effectuer des tests dans sa configuration initiale. Pour lancer un scan dans le répertoire courant, il suffit de la commande "clamscan" (avec la configuration initiale). Cependant, deux paramètres sont à prendre en compte pour menée à bien cette expérience :
+\begin{itemize}
+\item "max-recursion= n" : La récursion lors de l'analyse des fichiers compressés, 16 par défaut.
+\item "max-filesize= n" : Extrait et analyse  n octets de chaque archives. 25 Mo par défaut avec une limite de 4 Go.
+\end{itemize}
+$ $\\
+Nous avons également installer un second antivirus : Comodo (via package du site officiel \cite{Comodo}). Il dispose d'une interface graphique, mais ne nous permet pas de modifier des paramètres comme la récursion, ou la taille des fichiers analysés. Pour lancer un scan, il faut suivre les indications sur l'interface graphique.\\
+$ $\\
+VirusTotal met à notre disposition une API permettant d'envoyer des fichiers pour analyse via un script. Nous avons alors repris puis modifier un script existant pour effectuer nos tests. Ce script (écrit en Perl) effectue deux requêtes vers VirusTotal. Une première (HTTP POST) pour envoyer le fichier suspect. Et une seconde, pour récupérer le résultat sous forme d'un objet JSON. Ensuite le script génère un rapport mis en forme. Ce rapport contient le résultat de tous les antivirus associés au fichier envoyé.\\
+$ $\\
+En ce qui concerne Jotti et Virscan, nous avons utilisé l'interface web pour soumettre nos fichiers et récupérer les résultats.\\
+$ $\\
+Mastiff et Viper\\
+$ $\\
+Après avoir installer Suricata, nous avons rédiger des règles (\cite{SuricataExtraction}) pour que les fichiers soit décompressés puis inspectés. 
+%Cependant, Suricata étant un cas particulier de cette expérience, notre but ici est de voir si nous pouvons faire un déni de service lorsque Suricata va décompresser un fichier.
+Nous avons pris soin de modifier la configuration initiale de Suricata pour que l'extraction se passe de manière optimale :
+\begin{itemize}
+\item stream.reassembly.depth = 4gb, apres avoir réassembler le flux tcp, le fichier ne doit pas depasser une taille de 4Go.
+\item request\_body\_limit = 0 (infini), valeur que le corps de la requête HTTP ne peut pas dépasser.
+\item response\_body\_limit = 0 (infini), valeur que le corps de la réponse HTTP ne peut pas dépasser.
+\end{itemize}
+
+\subsection{Résultats et observations}
+\label{3.2résultats}
+
+%-------------------------------------------------------------
+%	CONCLUSION
+%-------------------------------------------------------------
+\section{Conclusion}
+\label{2.3ids}
+
+\newpage
+\begin{thebibliography}{}
+%
+% and use \bibitem to create references. Consult the Instructions
+% for authors for reference list style.
+
+\bibitem{PerformanceAnalysis}
+David J. Day et Benjamin M. Burns, "A Performance Analysis of Snort and Suricata Network Intrusion Detection and Prevention Engines"
+
+\bibitem{Suricata}
+oisf.net, The Open Information Security Foundation, organisation à but non lucrative qui développe et met à jour Suricata.
+
+\bibitem{SuricataDoc}
+redmine.openinfosecfoundation.org/projects/suricata/wiki/, la documentation pour utilisateurs et développeurs de Suricata.
+
+\bibitem{SuricataExtraction}
+\url{blog.inliniac.net/2011/11/29/file-extraction-in-suricata/}
+
+\bibitem{virustotal}
+virustotal.com, site agrégateurs d'antivirus, filière de Google, basé en espagne.
+
+\bibitem{Jotti}
+virusscan.jotti.org, site agrégateurs d'antivirus, basé aux Pays-Bas.
+
+\bibitem{Virscan}
+www.virscan.org, site agrégateurs d'antivirus, basé en chine.
+
+\bibitem{API}
+\url{perlgems.blogspot.fr/2012/05/using-virustotal-api-v20.html}
+
+\bibitem{Mastiff}
+www.korelogic.com
+
+\bibitem{Viper}
+www.viper.li
+
+\bibitem{Irma}
+irma.quarkslab.com
+
+\bibitem{Comodo}
+www.comodo.com
+
+\bibitem{Clamav}
+www.clamav.net
+
+%
+%http://www.av-comparatives.org/wp-content/uploads/2015/05/avc_linux_2015_en.pdf
+
+\end{thebibliography}
+
+\end{document}

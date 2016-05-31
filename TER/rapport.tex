@@ -47,19 +47,24 @@
 $ $\\Présentation de l'étude du comportement des outils défensif appliqué à un environnement de fichiers compressé par différents types d'algorithmes.\\
 Cette étude permettra d'analyser le comportement des outils :
 \begin{itemize}
-\item Suricata : Sonde de détection d'intrusion (ou IDS)
-\item Sites agrégateurs d'antivirus
-\item Framework d'analyse de malware
-\item Antivirus Windows / Linux
+\item Systèmes de détection d'intrusion (ou IDS) : Suricata
+\item Sites agrégateurs d'antivirus : VirusTotal, Jotti, Virscan
+\item Framework d'analyse de malware : Mastiff, Viper
+\item Antivirus Windows / Linux : ClamAV, Comodo
 \end{itemize}
-lorsqu'ils sont soumis à des fichier compressés.
+lorsqu'ils sont soumis à des fichiers compressés.
 
 \keywords{Bombe de compression \and IDS \and VirusTotal \and Antivirus \and Framework de détection de malware}
 \end{abstract}
 
 \section{Introduction}
 \label{intro}
-Stats sur la cybercriminalité.
+Selon l'étude de McAfee/CSIS de 2014, les pertes économique dues à la cybercriminalité représente 445 milliards de dollars par an, avec des attaques en forte hausse.\\
+Le but de ce rapport est d'analyser le comportement des outils défensifs sur les fichiers compressés.\\
+Est-ce que tous les formats de compression sont supportés ?\\
+Le comportement des antivirus commun entre les sites sont-ils similaire ?\\
+Est-ce que les bombes sont détectées ?\\
+
 
 %-------------------------------------------------------------
 %	Partie IDS / Suricata
@@ -67,14 +72,23 @@ Stats sur la cybercriminalité.
 \newpage
 \section{Les IDS : Sonde de détection d'intrusion}
 \label{sec1:ids}
-Text with citations \cite{Suricata} and \cite{virustotal}.
 
 \subsection{Présentation}
 \label{ids:présentation}
-But : faire peter Suricata avec les bombes.
+Les entreprises sont des cibles privilégiées par des pirates car elle renferment bien souvent les données (sensible) de leurs utilisateurs ainsi que des secret industriels. La mise en place d'un IDS à l'entrée (/ sortie) du réseau de l'entreprise permettrai de minimiser les fuites de ses données.\\
+Un IDS analyse le trafic réseau de manière transparente et permet ainsi de remonter des alertes pour l'administrateur voire même de bloquer certaine connexions.\\
+Est il possible de bloquer Suricata \cite{Suricata} sur l'analyse d'une bombe de compression afin de laisser passer un autre malware dans le réseau de l'entreprise ?
 
 \subsection{Fonctionnement}
 \label{ids:fonctionnement}
+Un IDS fonctionne sur un système de règles. Un administrateur, définit un certain nombre de règles que l'IDS doit vérifier lors de l'analyse du réseau. Suivant l'action affectée à une règle qui "matcherai", l'IDS peut :
+\begin{itemize}
+\item laisser passer un paquet
+\item détruire la paquet (mode IPS uniquement)
+\item rejeter le paquet, en générant des paquets ICMP erreur ainsi qu'une alerte
+\item générer une alerte visible dans un fichier de logs
+\end{itemize}
+
 
 \subsection{Analyse}
 \label{ids:analyse}
@@ -107,12 +121,8 @@ Nous allons tester chacun de ses sites en 3 étapes :
 \begin{itemize}
 \item 1. Analyse témoin : un fichier connu pour être malveillant
 \item 2. Analyse du même fichier dans différents formats de compression
-\item 3. Analyse des différentes bombes de compression
+\item 3. Analyse de l'impact des différentes bombes de compression
 \end{itemize}
-Le but de cette expérience est d'analyser le comportement de ses éléments sur les fichiers compressés.\\
-Est-ce que tous les format de compression sont supporté ?\\
-Le comportement des antivirus commun entre les sites sont ils similaire ?\\
-Est-ce que les bombes sont détectées ?\\
 
 \subsection{Fonctionnement}
 \label{agrégateurs:fonctionnement}
@@ -120,9 +130,15 @@ VirusTotal est actuellement le site le plus populaire dans ce domaine. Il permet
 \begin{itemize}
 \item L'interface web
 \item L'API
-\item Recherche par hash (md5, sha-1, sha-256) 
+\item Recherche par hash
 \end{itemize}
-Remarque : pour pouvoir utilisé l'API, il faut avoir un compte actif.
+Remarque : pour pouvoir utilisé l'API, il faut avoir un compte actif.\\
+$ $\\
+Jotti permet d'analyser un fichier avec 19 des antivirus les plus rependu.\\
+La soumission d'un fichier se fait via l'interface web su site.\\
+Il est également possible d'effectuer une recherche par hash.\\
+$ $\\
+Virscan dispose de 39 antivirus pour analyser les fichiers  soumis via leur site web.
 \subsection{Analyse}
 \label{agrégateurs:analyse}
 
@@ -138,6 +154,8 @@ Remarque : pour pouvoir utilisé l'API, il faut avoir un compte actif.
 
 \subsection{Présentation}
 \label{frameworks:présentation}
+L'utilisation de site comme VirusTotal implique l'envoi de fichiers vers des serveurs que l'on ne contrôle pas. Une entreprise ne peut se permettre de mettre leurs données sensibles dans des mains inconnues. C'est pourquoi, les framework tels que Mastiff et Viper sont important. En effet, une entreprise peut analyser de manière pousser un fichier suspect via un analyseur interne à cette entreprise.\\
+Le but de cette expérience est de vérifier que ses outils sont conforment face a des bombes de compression.
 
 \subsection{Fonctionnement}
 \label{frameworks:fonctionnement}
@@ -152,11 +170,13 @@ Remarque : pour pouvoir utilisé l'API, il faut avoir un compte actif.
 %	Partie AV linux --
 %-------------------------------------------------------------
 \newpage
-\section{Les Antivirus Linux}
+\section{Les Antivirus Linux / Windows}
 \label{sec4:av}
 
 \subsection{Présentation}
 \label{av:présentation}
+Contrairement aux agrégateurs d'AV et aux frameworks, les antivirus utilisent les ressources (CPU + RAM) des machines cibles pour analyser un fichier suspect. En effet, les AV sont des programmes installés sur des systèmes pour les protéger des attaques que leurs propriétaires peuvent rencontrer.\\
+Nous allons vérifier que ce type d'outil est robuste face aux attaques par déni de service provoqué par des bombes de compression.\\
 
 \subsection{Fonctionnement}
 \label{av:fonctionnement}

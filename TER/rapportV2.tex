@@ -53,7 +53,7 @@ $ $\\
 %Présentation de l'étude du comportement des outils défensif appliqué à un environnement de fichiers compressé par différents types d'algorithmes.\\
 %Cette étude permettra d'analyser le comportement des outils lorsqu'ils sont soumis à des fichiers compressés.
 
-\keywords{Bombe de compression \and IDS \and VirusTotal \and Antivirus \and Framework de détection de malwares}
+\keywords{Bombe de compression \and IDS \and Antivirus \and Framework}
 \end{abstract}
 
 %-------------------------------------------------------------
@@ -75,9 +75,35 @@ $ $\\
 
 \subsection{Antivirus}
 \label{2.1antivirus}
+Les antivirus (AV) sont les logiciels de sécurité les plus utilisés par les particuliers. Ce sont des programmes installer sur les machines des utilisateurs. Les antivirus sont lancés avant l'initialisation du système de fichiers et du réseau par l'OS. Cet outil permet de détecter les malwares et les empêche de s’exécuter sur le système. Il existe différentes manières de détecter un malware : 
+\begin{itemize}
+\item Scan par signature : L'AV va calculer la signature d'un fichier ou d'un morceau de code et va le comparer a une base de données. Méthode inefficace contre les malwares polymorphes ou capable de changer leur signature.
+\item Analyse heuristique : Méthode la plus puissante car elle permet de simuler l’exécution du code d'un programme dans une zone contrôlée. Ainsi, l'AV peut observer le comportement du code qui s’exécute et définir si il s'agit d'un malware ou non. Peut provoquer des fausses alertes.
+\item Controle d'integrité : Méthode qui permet de vérifier qu'un fichier n'a pas été modifié au cours du temps. Les informations comme la taille, la date et l'heure de dernière modifications, la somme de contrôle éventuelle du fichier sont analysées lors de la demande d'ouverture du fichier par l'utilisateur (si analyse en temps réel) ou lors d'un scan de l'AV.\\
+Le but de notre expérience est de tester si il est possible de faire un deni de service lorsque l'AV analyse une bombe de compression.\\
+Nous avons tester deux AV pour Linux : ClamAV (\url{www.clamav.net}) et Comodo (\url{www.comodo.com})\\
+\end{itemize}
 
-\subsection{Agrégateurs}
+\subsection{Agrégateurs d'antivirus}
 \label{2.2agrégateurs}
+Les agregateurs d'AV sont des outils qui permettent d'analyser des fichiers avec differents AV en meme temps. Le résultat obtenu en analysant un fichier avec ce type d'outils est plus fiable qu'avec un seul AV. Cependant, cet outil ne doit pas remplacer un AV installer sur une machine. Il existe deux types d'agregateurs : 
+\begin{itemize}
+\item Les sites web : 
+	\begin{itemize}
+	\item VirusTotal : \url{www.virustotal.com}, filière de Google, basée en Espagne, hébergé dans le cloud, comprenant 57 AV.
+	\item Jotti : \url{virusscan.jotti.org}, organisation basée aux Pays-Bas, hébergé dans le cloud, comprenant 19 AV.
+	\item Virscan : \url{www.virscan.org}, organisation basée en chine, comprenant 39 AV.
+	\end{itemize}
+\end{itemize}
+Pour utiliser ce service, il faut envoyer le fichier suspect vers le site pour que les moteurs des differents AV puisse l'analyser. Ce fichier n'est ensuite pas détruit, car il sert aux éditeurs d'AV pour améliorer leurs programmes. Il n'est donc pas concevable pour une entreprise d'envoyer des fichiers avec des données sensibles vers des serveurs dont l'entreprise n'a pas de contrôle. C'est pourquoi il existe aussi
+\begin{itemize}
+\item les frameworks d'analyse de malwares : 
+	\begin{itemize}
+	\item Mastiff, \url{www.korelogic.com}, 
+	\item Viper, \url{www.viper.li},
+	\end{itemize}
+\end{itemize}
+Les deux framework fonctionnent donc en local.
 
 \subsubsection{Sites web}
 \label{2.2.1sites}
@@ -90,7 +116,7 @@ $ $\\
 
 
 %-------------------------------------------------------------
-%	TESTs
+%	TESTS
 %-------------------------------------------------------------
 \section{Tests}
 \label{3.Tests}
@@ -98,9 +124,10 @@ $ $\\
 \subsection{Protocole de test}
 \label{3.1Protocole}
 Dans un premier temps, nous avons générer un fichier (payload via metasploit) connu pour être analyser comme un malware par la plupart des outils disponible sur le marché. Ensuite, pour chacun des outils, nous avons effectuer une analyse témoin. Cette analyse se compose du fichier générer précédemment ainsi que d'un fichier contenant uniquement des zéros et qui est donc complètement inoffensif.\\
-Dans un second temps, nous avons analyser les résultats de ses deux fichiers compressé dans différents formats.\\
+Dans un second temps, nous avons analyser les résultats de ses deux fichiers compressé dans différents formats : .gz, .lzma, .tar.bz2, .tar.gz, .tar.xz, .lz, .lzo, .zip\\
 Et enfin, nous avons analyser l'impact des bombes de compression sur ses outils pour vérifier leur robustesse sur un éventuel déni de service.\\
 Pour rappel : lorsqu'un fichier compressé de petite taille (42 Ko) se décompresse en un autre fichier d'une taille très largement supérieur (4.5 Po), c'est ce qu'on appelle une bombe de compression (42.zip).\\
+Dans notre expérience, les fichiers décompressés sont de taille : 250 Mo, 500 Mo, 1 Go, 4.5 Po.
 $ $\\
 Nous avons réaliser les tests (et installer les outils nécessaires) sur une machine ayant un OS Linux (Ubuntu 12.04 LTS).\\
 Après avoir installer ClamAV (via les dépôts Ubuntu/Debian) nous avons effectuer des tests dans sa configuration initiale. Pour lancer un scan dans le répertoire courant, il suffit de la commande "clamscan" (avec la configuration initiale). Cependant, deux paramètres sont à prendre en compte pour menée à bien cette expérience :
@@ -115,18 +142,21 @@ VirusTotal met à notre disposition une API permettant d'envoyer des fichiers po
 $ $\\
 En ce qui concerne Jotti et Virscan, nous avons utilisé l'interface web pour soumettre nos fichiers et récupérer les résultats.\\
 $ $\\
-Mastiff et Viper\\
+Mastiff est un processus que l'on peut exécuter dans un docker. Dans ce cas, un dossier est partagée entre la VM et le docker. Dans ce dossier, nous avons au préalable placé les fichiers à analyser par Mastiff. Dans le cas présent, nous n'avons pas de fichier confidentiel, c'est pourquoi nous avons ajouter l'option d'envoyer les fichiers à analyser vers VirusTotal automatiquement. Lors de son analyse, Mastiff génère un fichier de résultat par moteur d'analyse.\\
+$ $\\
+Viper est aussi un processus que l'on peut lancer dans un docker. A la différence que Viper met à notre disposition une interface web, à partir de laquelle nous pouvons soumettre nos fichiers. Une fois un fichier soumis, une multitude de commande peuvent être lancer pour tester le fichier suspect. Les résultats de ses commandes se retrouvent sur cette interface web.\\
 $ $\\
 Après avoir installer Suricata, nous avons rédiger des règles (\cite{SuricataExtraction}) pour que les fichiers soit décompressés puis inspectés. 
 %Cependant, Suricata étant un cas particulier de cette expérience, notre but ici est de voir si nous pouvons faire un déni de service lorsque Suricata va décompresser un fichier.
 Nous avons pris soin de modifier la configuration initiale de Suricata pour que l'extraction se passe de manière optimale :
 \begin{itemize}
-\item stream.reassembly.depth = 4gb, apres avoir réassembler le flux tcp, le fichier ne doit pas depasser une taille de 4Go.
+\item stream.reassembly.depth = 4gb, après avoir ré-assembler le flux TCP, le fichier ne doit pas dépasser une taille de 4Go.
 \item request\_body\_limit = 0 (infini), valeur que le corps de la requête HTTP ne peut pas dépasser.
 \item response\_body\_limit = 0 (infini), valeur que le corps de la réponse HTTP ne peut pas dépasser.
 \end{itemize}
+De plus, sur une autre machine nous avons installer un serveur web disposant des fichiers à tester par Suricata. Ainsi, avec une simple requête sur le serveur, Suricata reconstitue le fichier puis l'inspecte.
 
-\subsection{Résultats et observations}
+\subsection{Observations et résultats}
 \label{3.2résultats}
 
 %-------------------------------------------------------------
@@ -153,32 +183,12 @@ redmine.openinfosecfoundation.org/projects/suricata/wiki/, la documentation pour
 \bibitem{SuricataExtraction}
 \url{blog.inliniac.net/2011/11/29/file-extraction-in-suricata/}
 
-\bibitem{virustotal}
-virustotal.com, site agrégateurs d'antivirus, filière de Google, basé en espagne.
-
-\bibitem{Jotti}
-virusscan.jotti.org, site agrégateurs d'antivirus, basé aux Pays-Bas.
-
-\bibitem{Virscan}
-www.virscan.org, site agrégateurs d'antivirus, basé en chine.
-
 \bibitem{API}
 \url{perlgems.blogspot.fr/2012/05/using-virustotal-api-v20.html}
-
-\bibitem{Mastiff}
-www.korelogic.com
-
-\bibitem{Viper}
-www.viper.li
 
 \bibitem{Irma}
 irma.quarkslab.com
 
-\bibitem{Comodo}
-www.comodo.com
-
-\bibitem{Clamav}
-www.clamav.net
 
 %
 %http://www.av-comparatives.org/wp-content/uploads/2015/05/avc_linux_2015_en.pdf

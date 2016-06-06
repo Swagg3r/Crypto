@@ -71,7 +71,7 @@ $ $\\
 
 \subsection{Antivirus}
 \label{2.1antivirus}
-Les antivirus (AV) sont des programmes très importants en sécurité. Ce sont des programmes installés sur les machines des utilisateurs et ils permettent de détecter les malwares et les empêche de s’exécuter sur le système. Il existe différentes manières de détecter un malware : 
+Les antivirus (AV) sont des programmes très importants en sécurité. Ce sont des programmes installés sur les machines des utilisateurs et ils permettent de détecter les malwares et les empêchent de s’exécuter sur le système. Il existe différentes manières de détecter un malware : 
 \begin{itemize}
 \item Scan par signature : On calcule la signature d'un fichier ou d'un morceau de code et on le compare à une base de données. Cette méthode est inefficace contre les malwares polymorphes ou capable de changer leur signature. C'est cependant la méthode la plus populaire chez les concepteurs d'antivirus.
 \item Analyse heuristique : La plus puissante des méthodes car elle permet de simuler l’exécution du code d'un programme dans une zone contrôlée. Ainsi, l'AV peut observer le comportement du code qui s’exécute et définir si il s'agit d'un malware ou non. Cette méthode peut provoquer des fausses alertes et coûte du temps CPU.
@@ -168,15 +168,15 @@ Après avoir installé Suricata, nous avons rédigé des règles pour que les fi
 \end{itemize}
 De plus, sur une autre machine nous avons installé un serveur web disposant des fichiers à tester par Suricata. Ainsi, avec une simple requête sur le serveur, Suricata reconstitue le fichier puis l'inspecte.
 
-\subsection{Résultats et Observations}
+\subsection{Résultats et observations}
 \label{3.2résultats}
-\textbf{Résultat} de l'analyse de \textbf{ClamAV} et \textbf{Comodo} :\\
+\textbf{Résultats} de l'analyse de \textbf{ClamAV} et \textbf{Comodo} :\\
 $ $\\
 \begin{tabular}{|l|l|l|l|l|}
   \hline
   \textbf{Nom du fichier} & \multicolumn{2}{|c|}{\textbf{ClamAV}} & \multicolumn{2}{|c|}{\textbf{Comodo}}\\
   \hline
-   & Résultats & Temps d'analyse & Résultats & Temps d'analyse \\
+   & Résultats & Temps & Résultats & Temps \\
   \hline
   \hline
 payload.exe & Positif & 9.2s & Positif & 4s\\
@@ -229,9 +229,11 @@ r.zip & Négatif$^2$ & 8.4s & Négatif & 4s\\
 42.tar.bz2 & Négatif  & 10.9s & Négatif & 6s$^3$\\
 	\hline
 \end{tabular}
+$ $\\
 $^1$ : Warning constaté lors de la décompression pour 1Go.tar.xz, "decompress file size exceeds limits - only scanning 104857600 bytes".\\
 $^2$ : En forçant environ 400 récursions (au lieu de 16 par défaut), il y a une erreur de segmentation.\\
-$^3$ : Limite de récursion atteinte mais non connue. Utilisation du CPU très importante lors de l'analyse d'une sous partie de 42.tar.bz2.
+$^3$ : Limite de récursion atteinte mais non connue. Utilisation du CPU très importante lors de l'analyse d'une sous partie de 42.tar.bz2.\\
+Observations : Grâce au temps des analyses, on remarque que certain formats de compression ne sont pas vraiment analysés.
 $ $\\
 Résultats pour les sites web agrégateurs d'AV :\\
 \begin{tabular}{|*{6}{c|}}
@@ -243,69 +245,96 @@ payload.exe & 42/56 & 17/19 & 20/39\\
 fichier\_inoffensif & 0/56 & 0/19  & 0/39 \\
 	\hline
 	\hline
-250Mo.gz & 0/56 & 1/19 & \\
+250Mo.gz & 0/56 & 1/19 & 2/39 \\
 	\hline
-1Go.gz &  1/55  & 3/19 & \\
+1Go.gz &  1/55  & 3/19 & 3/39\\
     \hline
     \hline
-250Mo.lz & 0/57 & 0/19 & \\
+250Mo.lz & 0/57 & 0/19 & 0/39\\
 	\hline
-1Go.lz & 0/56 & 0/19 & \\
+1Go.lz & 0/56 & 0/19 & 0/39\\
     \hline
     \hline
-250Mo.lzma & 0/57 & 0/19 & \\
+250Mo.lzma & 0/57 & 0/19 & 0/39\\
 	\hline
-1Go.lzma & 0/57 & 0/19 & \\
+1Go.lzma & 0/57 & 0/19 & 0/39\\
     \hline
     \hline
-250Mo.lzo & 0/56 & 0/19 & \\
+250Mo.lzo & 0/56 & 0/19 & 0/39\\
 	\hline
-1Go.lzo & 0/55 & 0/19 & \\
+1Go.lzo & 0/55 & 0/19 & 0/39\\
     \hline
     \hline
-250Mo.tar.bz2 & 0/55 & 4/18 & \\
+250Mo.tar.bz2 & 0/55 & 4/18 & 1/39\\
 	\hline
-1Go.tar.bz2 & 1/57 & 5/19 & \\
+1Go.tar.bz2 & 1/57 & 5/19 & 2/39\\
     \hline
     \hline
-250Mo.tar.gz & 0/57 & 2/19 & \\
+250Mo.tar.gz & 0/57 & 2/19 & 1/39\\
 	\hline
-1Go.tar.gz & 1/57 &  & \\
+1Go.tar.gz & 1/57 & 3/16 & 2/39\\
     \hline
     \hline
-250Mo.tar.xz &  &  & \\
+250Mo.tar.xz & 0/57 & 2/20 & 0/39\\
 	\hline
-1Go.tar.xz &  &  & \\
+1Go.tar.xz & 0/57 & 2/20 & 0/39\\
     \hline
     \hline
-250Mo.zip &  &  & \\
+250Mo.zip & 1/56 & 2/20 & 0/39\\
 	\hline
-1Go.zip &  &  & \\
+1Go.zip & 2/55 & 3/20 & 0/39\\
     \hline
     \hline
-r.zip &  &  & \\
+r.zip & 0/54 & 1/18 & 0/39\\
 	\hline
-42.tar.bz2 &  &  & \\
+42.tar.bz2 & 1/56 & 4/15 & 0/39\\
 	\hline
 \end{tabular}
 $ $\\
-Remarque sur l'antivirus VBA32 :\\
+\\
+Observations :\\
+Pour Virscan si un AV n'a pas trouvé de malware en moins de 60 Secondes alors le résultat est : "Rien n'a été trouvé".\\
+Tous les antivirus semble ne pas décompresser les format de type .lz, .lzma et .lzo.
 $ $\\
+\\
 \begin{tabular}{|c|c|c|c|}
     \hline
-     Nom fichier & VirusTotal & Jotti & Virscan \\
+     \textbf{Nom fichier} & \textbf{VirusTotal} & \textbf{Jotti} & \textbf{Virscan} \\
+     \hline
+    250Mo.gz &  & avast & Fprot, Panda\\
     \hline
-    1Go.gz & VBA32 & Arcabit, avast, VBA32 & \\
+    1Go.gz & VBA32 & Arcabit, avast, VBA32 & Fprot, Panda, VBA32\\
     \hline
-    250Mo.tar.bz2 & & AVG, Arcabit, avast, Sophos & \\
     \hline
-    1Go.tar.bz2 & VBA32 & AVG, Arcabit, avast, sophos, VBA32 & \\
+    250Mo.tar.bz2 & & AVG, Arcabit, avast, Sophos & Fprot\\
     \hline
-    250Mo.tar.gz & & Arcabit, avast & \\
+    1Go.tar.bz2 & VBA32 & AVG, Arcabit, avast, sophos, VBA32 & VBA32, Fprot\\
     \hline
-    1Go.tar.gz & VBA32 & Aracabit, avast & \\
+    \hline
+    250Mo.tar.gz & & Arcabit, avast & Fprot\\
+    \hline
+    1Go.tar.gz & VBA32 & Aracabit, avast, VBA32 & Fprot, VBA32\\
+    \hline
+    \hline
+    250Mo.tar.xz & & Arcabit, AVG & \\
+    \hline
+    1Go.tar.xz & & Arcabit, AVG & \\
+    \hline
+    \hline
+    250Mo.zip & VBA32 & avast, VBA32 & \\
+    \hline
+    1Go.zip & Baidu, VBA32 & Arcabit, avast, VBA32 & \\
+    \hline
+    r.zip &  & Sophos  & \\
+    \hline
+    \hline
+    42.tar.bz2 & Zillya & Arcabit, avast, AVG, Sophos  & \\
     \hline
 \end{tabular}
+$ $\\
+Observations :\\
+Nous pouvons remarquer que les antivirus ne sont pas configurés de la même manière selon les différents sites hormis VBA32. VBA32 semble être cohérent sur tous les sites sur lequel il est testé. En effet, rien de suspect pour VBA32 sur les fichier de 250Mo mais il y a une détection sur les fichiers de 500Mo. Après analyse approfondie : la limite de détection est de 315Mo.\\
+ClamAV et Comodo analysent les fichiers sur Virscan et on remarque qu'il n'y a pas de différence entre la version installée et la version online : rien n'est détecté.\\
 $ $\\
 Résultats sur Mastiff et Viper :\\
 $ $\\

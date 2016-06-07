@@ -73,93 +73,69 @@ $ $\\
 \label{2.1antivirus}
 Les antivirus (AV) sont des programmes très importants en sécurité. Ce sont des programmes installés sur les machines des utilisateurs et ils permettent de détecter les malwares et les empêchent de s’exécuter sur le système. Il existe différentes manières de détecter un malware : 
 \begin{itemize}
-\item Scan par signature : On calcule la signature d'un fichier ou d'un morceau de code et on le compare à une base de données. Cette méthode est inefficace contre les malwares polymorphes ou capable de changer leur signature. C'est cependant la méthode la plus populaire chez les concepteurs d'antivirus.
-\item Analyse heuristique : La plus puissante des méthodes car elle permet de simuler l’exécution du code d'un programme dans une zone contrôlée. Ainsi, l'AV peut observer le comportement du code qui s’exécute et définir si il s'agit d'un malware ou non. Cette méthode peut provoquer des fausses alertes et coûte du temps CPU.
+\item scan par signature : on calcule la signature d'un fichier ou d'un morceau de code et on le compare à une base de données. C'est la méthode la plus populaire chez les concepteurs d'antivirus. Cette méthode est cependant inefficace contre les malwares polymorphes ou capable de changer leur signature.
+\item analyse heuristique : la plus puissante des méthodes car elle permet de simuler l’exécution du code d'un programme dans une zone contrôlée. Ainsi, l'AV peut observer le comportement du code qui s’exécute et définir s'il s'agit d'un malware ou non. Cette méthode peut provoquer des fausses alertes, coûte du temps CPU et ne garantie pas toujours un résultat.
 \item Contrôle d'intégrité : Permet de vérifier qu'un fichier n'a pas été modifié au cours du temps. Les informations comme la taille, la date et l'heure de dernière modification, la somme de contrôle éventuelle du fichier sont analysées lors de la demande d'ouverture du fichier par l'utilisateur (si analyse en temps réel) ou lors d'un scan de l'AV.\\
+\end{itemize}
 Le but de notre expérience est de tester s'il est possible de faire un déni de service lorsque l'AV analyse une bombe de compression.\\
 Nous avons testé deux AV pour Linux : ClamAV (\url{www.clamav.net}) et Comodo (\url{www.comodo.com})\\
-\end{itemize}
 
 \subsection{Agrégateurs d'antivirus}
 \label{2.2agrégateurs}
-Les agrégateurs d'AV sont des outils qui permettent d'analyser des fichiers avec plusieurs AV en même temps. Le résultat obtenu en analysant un fichier avec ce type d'outils est plus fiable qu'avec un seul AV. Cependant, cet outil ne doit pas remplacer un AV installé sur une machine. Il existe deux types d’agrégateurs :  
+Les agrégateurs d'AV sont des outils qui permettent d'analyser des fichiers avec plusieurs AV en même temps. Cet outil ne doit pas remplacer un AV installé sur une machine. Il existe deux types d’agrégateurs :  
 
 \subsubsection{Sites web}
 \label{2.2.1sites}
-Ces sites web spécialisés permettent d'analyser les fichiers grâce à des dizaines d'antivirus différents. Un partenariat relie les éditeurs d'AV et le site. Les éditeurs d'AV mettent à disposition des sites leur programme. Cela signifie que les éditeurs sont responsables de leur configuration. Il peut arriver qu'un AV soit configuré sur un site différemment que la version commerciale. En effet, il s'agit d'un bon moyen pour les éditeurs de tester de nouvelles fonctionnalités, configurations. Lorsqu'un fichier est soumis par un utilisateur sur cette plateforme, il est analysé par les moteurs des différents AV. Dans le cas où au moins un AV détecte un fichier comme malveillant, le fichier est envoyé aux éditeurs des AV qui ne l'on pas détecter pour l'améliorer. Nous avons choisis 3 sites agrégateurs d'AV pour réaliser nos tests :\\
-\begin{tabular}{|l|p{3cm}|p{3cm}|p{3cm}|}
+Ces sites web spécialisés permettent d'analyser les fichiers grâce à des dizaines d'antivirus différents. Un partenariat relie les éditeurs d'AV et le site. Les éditeurs d'AV mettent à disposition des sites leur programme. Cela signifie que les éditeurs sont responsables de leur configuration. Il peut arriver qu'un AV soit configuré différemment sur un site par rapport à la version commerciale. En effet, il s'agit d'un bon moyen pour les éditeurs de tester de nouvelles fonctionnalités, configurations et d'inciter les utilisateurs à utiliser leur version commerciale. L'utilisation de plusieurs antivirus permet de combiner plusieurs algorithmes de détection et plusieurs bases de données. Lorsqu'un fichier est soumis par un utilisateur sur cette plate-forme, il est analysé par les moteurs des différents AV. Dans le cas où au moins un AV détecte un fichier comme malveillant, l'utilisateur est averti sur le caractère malicieux du fichier. Nous avons choisis 3 sites agrégateurs d'AV pour réaliser nos tests :\\
+\begin{tabular}{|l|c|c|c|}
   \hline
    \textbf{Site web} & \textbf{VirusTotal} & \textbf{Jotti} & \textbf{Virscan} \\
    \hline
   Nombre d'antivirus & 57 & 19 & 39\\
   \hline
-  Situation géographique & Filiale de Google, basée en espagne & organisation basée aux pays-bas & organisation basée en chine\\
+  Localisation & Google, Espagne & Pays-bas & Chine\\
   \hline
-  Type d'hebergement & Cloud & Cloud & Cloud\\
+  Type d’hébergement & Cloud & Cloud & Cloud\\
   \hline
 \end{tabular}
 $ $\\
 \textit{Remarque} : VirusTotal est le plus populaire avec en moyenne 1.5M de soumissions par jours (dont 16.6\% provenant de France).\\
 $ $\\
-Pour utiliser ce service, un utilisateur doit envoyer le fichier suspect vers le site pour que les moteurs des différents AV puissent l'analyser. Après analyse, le fichier n'est pas détruit s'il est considéré comme dangereux, car il est envoyé aux éditeurs d'AV pour améliorer leurs programmes. Il n'est donc pas concevable pour une personne (physique ou morale) d'envoyer des fichiers avec des données sensibles vers des serveurs dont cette personne n'a pas de contrôle. C'est pourquoi il existe aussi des « Framework de détection de malwares ».
+Pour utiliser ce service, un utilisateur doit envoyer le fichier suspect vers le site pour que les moteurs des différents AV puissent l'analyser. VirusTotal met à notre disposition une API permettant d'envoyer des fichiers pour analyse via un script. Nous avons alors repris puis modifier un script \cite{API} existant pour effectuer nos tests. Écrit en Perl, ce script effectue deux requêtes vers VirusTotal. Une première (HTTP POST) pour envoyer le fichier suspect. Et une seconde, pour récupérer le résultat sous forme d'un objet JSON. Ensuite le script génère un rapport mis en forme. Ce rapport contient le résultat des antivirus partenaires de VirusTotal.\\
+$ $\\
+En ce qui concerne Jotti et Virscan, nous avons utilisé l'interface web pour soumettre nos fichiers et récupérer les résultats.\\
+$ $\\
+Après analyse, le fichier n'est pas détruit s'il est considéré comme dangereux, car il est envoyé aux éditeurs d'AV pour améliorer leurs programmes. Il n'est donc pas concevable pour une personne (physique ou morale) d'envoyer des fichiers avec des données sensibles vers des serveurs dont il n'a pas de contrôle et pour lequel il ne maîtrise pas la juridiction. C'est pourquoi il existe aussi des « Framework de détection de malwares ».\\
 
 \subsubsection{Frameworks}
-Ce type d'outils fonctionne en local, idéalement sur une machine virtuelle pour éviter de contaminer la machine hôte. Ce sont des programmes qui permettent à un utilisateur d'analyser un fichier suspect de différentes façons via des plugins. Pour notre étude, nous avons utilisé deux \textit{Frameworks} : 
+Ce type d'outils fonctionne en local, idéalement sur une machine virtuelle pour éviter de contaminer la machine hôte. Ce sont des programmes qui permettent à un utilisateur d'analyser un fichier suspect de différentes façons via des plugins. Pour notre étude, nous avons utilisé deux \textit{frameworks} : 
 \label{2.2.2frameworks}
 \begin{itemize}
 \item Mastiff, \url{www.korelogic.com}, société basée au USA, composée de professionnels en sécurité informatique.
 \item Viper, \url{www.viper.li}, créer par Claudio Guarnieri, chercheur en sécurité informatique.
 \end{itemize}
-Ses deux outils sont préinstaller dans la distribution REMnux (\url{remnux.org}) qu'il est facile d'importer dans Virtualbox (\url{www.virtualbox.org}).\\
+Ces deux outils sont pré-installés dans la distribution REMnux (\url{remnux.org}) qu'il est facile d'importer dans Virtualbox (\url{www.virtualbox.org}).\\
 Mastiff et Viper permettent entre autre:
 \begin{itemize}
-\item D’identifier et classer le type des fichiers analysé grâce aux règles de YARA, (\url{plusvic.github.io/yara}).
-\item Reconnaître deux fichiers dont le contenu est très similaire grâce au fuzzy hashing (ssdeep) (\url{ssdeep.sourceforge.net}). Prenons par exemple les commandes suivantes : "echo message1 > fichier1.txt" et "echo message2 > fichier2.txt". Les deux fichiers générer auront des digests très différents avec aucune ressemblance possible. Cependant, grâce à ssdeep il est possible de faire ressortir le fait que ses deux fichiers sont presque identiques. Technique pratique pour repérer les malwares polymorphes.
-\item Extraire et analyser récursivement des fichiers zip. C'est notamment cette dernière qui nous intéresse et que nous allons tester.
+\item d’identifier et classer le type des fichiers analysés grâce aux règles de YARA : un outil qui identifie et classe les malwares grâce a des règles, (\url{plusvic.github.io/yara}).
+\item de reconnaître deux fichiers dont le contenu est très similaire grâce au fuzzy hashing (ssdeep) (\url{ssdeep.sourceforge.net}). Prenons par exemple les commandes suivantes : "echo message1 > fichier1.txt" et "echo message2 > fichier2.txt". Les deux fichiers générer auront des digests très différents avec aucune ressemblance possible. Cependant, grâce à ssdeep il est possible de faire ressortir le fait que ces deux fichiers sont presque identiques. Technique pratique pour repérer les malwares polymorphes.
+\item d'extraire et analyser récursivement des fichiers zip. C'est notamment cette dernière qui nous intéresse et que nous allons tester.
 \end{itemize}
+Mastiff est un programme dont le processus peut être exécuté dans un docker. Dans ce cas, un dossier est partagé entre la VM et le docker. Dans ce dossier, nous avons au préalable placé les fichiers à analyser par Mastiff. Dans le cas présent, nous n'avons pas de fichier confidentiel, c'est pourquoi nous avons ajouté l'option d'envoyer les fichiers à analyser vers VirusTotal automatiquement. Lors de son analyse, Mastiff génère un fichier de résultats par moteur d'analyse.\\
+$ $\\
+Viper est aussi un programme dont le processus peut s’exécuter dans un docker. A la différence que Viper met à notre disposition une interface web, à partir de laquelle nous pouvons soumettre nos fichiers. Une fois un fichier soumis, une multitude de commandes peuvent être lancées pour tester le fichier suspect. Les résultats de ces commandes se retrouvent sur cette interface web.\\
 
 \subsection{IDS}
 \label{2.3ids}
 Les systèmes de détection d'intrusion (IDS) sont des programmes permettant d'analyser le trafic réseau de manière transparente. Idéalement l'IDS est situé au point d'entrer du réseau d'une entreprise pour pouvoir analyser tout le trafic réseau. L'IDS fonctionne sur un système de règles et de pattern matching. Un administrateur définit un certain nombre de règles que l'IDS doit vérifier lors de l'analyse du trafic réseau. Suivant les règles que l’administrateur a définies, l'IDS permet :
 \begin{itemize}
-\item De laisser passer un paquet sans finir l'analyse.
-\item Rejeter le paquet, en générant des paquets ICMP erreur ainsi qu'une alerte
-\item Générer une alerte dans le fichier de logs.
+\item de laisser passer un paquet sans finir l'analyse.
+\item rejeter le paquet, en générant des paquets ICMP erreur ainsi qu'une alerte
+\item générer une alerte dans le fichier de logs.
 \end{itemize} 
 Par exemple, l'administrateur peut décider de créer une règle  qui générera une alerte lors qu'une connexion sera établie sur les serveurs de Facebook. Cette alerte permet d'identifier l'adresse IP source de la requête HTTP.\\
-Le pattern matching fonctionne aussi avec le contenu des paquets qui circulent sur le réseau. De cette manière une règle peut être créée pour générer une alerte lorsqu'un paquet contient les caractères "Euros 2016" par exemple.\\
-L'IDS que nous avons choisis de tester est Suricata. Suricata se démarque de la concurrence par une analyse multithread. Avec toujours de plus en plus de données, l'analyse rapide et efficace devient de plus en plus important. L'article de David J. Day et Benjamin M. Burns \cite{PerformanceAnalysis}  analyse les performances de Suricata. Suricata supporte nativement l'IPv6 et est open source. Suricata extrait les fichiers compressés pour analyser leur contenu \cite{SuricataExtraction}. Le but de l’étude est de vérifier qu'il n'y a pas de déni de service possible lorsque Suricata analyse une bombe de compression.
-
-
-%-------------------------------------------------------------
-%	TESTS
-%-------------------------------------------------------------
-\section{Tests}
-\label{3.Tests}
-
-\subsection{Protocole de test}
-\label{3.1Protocole}
-Dans un premier temps, nous avons généré un exécutable Windows (payload via metasploit) connu pour être analysé comme un malware par la plupart des outils disponibles sur le marché. Ensuite, pour chacun des outils, nous avons effectué une analyse témoin. Cette analyse se compose du fichier générer précédemment, et d'un fichier contenant uniquement des zéros et qui est donc complètement inoffensif.\\
-Dans un second temps, nous avons analysé les résultats des deux premiers fichiers compressés dans différents formats : .gz, .lzma, .tar.bz2, .tar.gz, .tar.xz, .lz, .lzo, .zip pour tenter de leurrer les AV. Une autre méthode de contournement d'AV est décrite dans l'article "Contournement d'antivirus par génération d'attaques caméléon"~\cite{Contournement}.\\
-Enfin, nous avons utilisé des fichiers dans le but de provoquer un déni de service, voire de provoquer une erreur lors de l'exécution des AV. Ces fichiers sont des bombes de compression : des fichiers qui à la décompression engendre des fichiers de très grande taille.\\
-$ $\\
-Nous avons réalisé les tests (et installer les outils nécessaires) sur une machine ayant un OS Linux (Ubuntu 12.04 LTS).\\
-Après avoir installé ClamAV (via les dépôts Ubuntu/Debian) nous avons effectué des tests dans sa configuration initiale. Cependant, deux paramètres sont à prendre en compte pour mener à bien cette expérience :
-\begin{itemize}
-\item "max-recursion= $n$" : la profondeur maximale d'exploration lors d'une décompression, 16 par défaut.
-\item "max-filesize= $n$" : Extrait et analyse  n octets de chaque archives. 25 Mo par défaut avec une limite de 4 Go.
-\end{itemize}
-$ $\\
-Nous avons également installé un second antivirus : Comodo (via le package du site officiel). Il dispose d'une interface graphique, mais ne nous permet pas de modifier des paramètres comme la récursion, ou la taille des fichiers analysés. Pour lancer un scan, il faut suivre les indications sur l'interface graphique.\\
-$ $\\
-VirusTotal met à notre disposition une API permettant d'envoyer des fichiers pour analyse via un script. Nous avons alors repris puis modifier un script existant pour effectuer nos tests. Ce script (écrit en Perl) effectue deux requêtes vers VirusTotal. Une première (HTTP POST) pour envoyer le fichier suspect. Et une seconde, pour récupérer le résultat sous forme d'un objet JSON. Ensuite le script génère un rapport mis en forme. Ce rapport contient le résultat des antivirus partenaires de VirusTotal.\\
-$ $\\
-En ce qui concerne Jotti et Virscan, nous avons utilisé l'interface web pour soumettre nos fichiers et récupérer les résultats.\\
-$ $\\
-Mastiff est un programme dont le processus peut être exécuté dans un docker. Dans ce cas, un dossier est partagé entre la VM et le docker. Dans ce dossier, nous avons au préalable placé les fichiers à analyser par Mastiff. Dans le cas présent, nous n'avons pas de fichier confidentiel, c'est pourquoi nous avons ajouté l'option d'envoyer les fichiers à analyser vers VirusTotal automatiquement. Lors de son analyse, Mastiff génère un fichier de résultats par moteur d'analyse.\\
-$ $\\
-Viper est aussi un programme dont le processus peut s’exécuter dans un docker. A la différence que Viper met à notre disposition une interface web, à partir de laquelle nous pouvons soumettre nos fichiers. Une fois un fichier soumis, une multitude de commandes peuvent être lancées pour tester le fichier suspect. Les résultats de ses commandes se retrouvent sur cette interface web.\\
-$ $\\
+L'analyse s'effectue aussi sur le contenu des paquets qui circulent sur le réseau. De cette manière une règle peut être créée pour générer une alerte lorsqu'un paquet contient les caractères "Euro 2016" par exemple.\\
+L'IDS que nous avons choisi de tester est Suricata \cite{Suricata}. Suricata se démarque de la concurrence (snort en particulier) par une analyse multithread. C'est une caractéristique importante. L'article de David J. Day et Benjamin M. Burns \cite{PerformanceAnalysis}  analyse les performances de Suricata. Suricata supporte nativement l'IPv6 et est open source. Suricata extrait les fichiers compressés pour analyser leur contenu \cite{SuricataExtraction}. Le but de l’étude est de vérifier qu'il n'y a pas de déni de service possible lorsque Suricata analyse une bombe de compression.\\
 Après avoir installé Suricata, nous avons rédigé des règles pour que les fichiers soient décompressés puis inspectés. Nous avons pris soin de modifier la configuration initiale de Suricata pour que l'extraction se passe de manière optimale :
 \begin{itemize}
 \item stream.reassembly.depth = 4gb, après avoir réassemblé le flux TCP, le fichier ne doit pas dépasser une taille de 4Go.
@@ -167,6 +143,47 @@ Après avoir installé Suricata, nous avons rédigé des règles pour que les fi
 \item response\_body\_limit = 0 (infini), valeur que le corps de la réponse HTTP ne peut pas dépasser.
 \end{itemize}
 De plus, sur une autre machine nous avons installé un serveur web disposant des fichiers à tester par Suricata. Ainsi, avec une simple requête sur le serveur, Suricata reconstitue le fichier puis l'inspecte.
+
+
+%-------------------------------------------------------------
+%	TESTS
+%-------------------------------------------------------------
+\section{Expérimentations}
+\label{3.expérimentations}
+
+\subsection{Méthodologie}
+\label{3.1méthodologie}
+Dans un premier temps, nous avons généré un exécutable Windows (payload via metasploit) connu pour être analysé comme un malware par la plupart des outils disponibles sur le marché. Ensuite, pour chacun des outils, nous avons effectué une analyse témoin. Cette analyse se compose du fichier généré précédemment, et d'un fichier contenant uniquement des zéros et qui est donc complètement inoffensif.\\
+Dans un second temps, nous avons analysé les résultats des deux premiers fichiers compressés dans différents formats : .gz, .lzma, .tar.bz2, .tar.gz, .tar.xz, .lz, .lzo, .zip pour tenter de leurrer les AV. Il existe d'autres méthodes de contournement comme celles décrites dans~\cite{Contournement}.\\
+Enfin, nous avons utilisé des bombes de compression : des fichiers qui à la décompression engendre des fichiers de très grande taille, dans le but de provoquer un déni de service lors de l'exécution des AV.\\
+$ $\\
+Nous avons réalisé les tests (et installer les outils nécessaires) sur une machine ayant un OS Linux 3.13.0-32-generic (Ubuntu 12.04 LTS).\\
+Les logiciels que nous avons utilisés :\\
+\begin{tabular}{|l|l|l|}
+    \hline
+     \textbf{Logiciel} & \textbf{Catégorie} & \textbf{Version}\\
+    \hline
+    ClamAV & Antivirus & 0.98.7\\ 			
+    \hline
+    Comodo & Antivirus & 1.1.268025.1\\
+    \hline
+    \hline
+    Mastiff & Framework & 0.7.1\\
+    \hline
+    Viper & Framework & 0.12.9\\
+    \hline
+    \hline
+    Suricata & IDS & 3.0\\
+    \hline
+ \end{tabular}
+$ $\\
+\\
+Pour l'utilisation de ClamAV deux paramètres sont à prendre en compte pour mener à bien cette expérience :
+\begin{itemize}
+\item "max-recursion= $n$" : la profondeur maximale d'exploration lors d'une décompression, 16 par défaut.
+\item "max-filesize= $n$" : Extrait et analyse  n octets de chaque archives. 25 Mo par défaut avec une limite de 4 Go.
+\end{itemize}
+Comodo ne nous permet pas de modifier des paramètres comme la récursion, ou la taille des fichiers analysés.\\
 
 \subsection{Résultats et observations}
 \label{3.2résultats}
@@ -238,7 +255,9 @@ $ $\\
 Résultats pour les sites web agrégateurs d'AV :\\
 \begin{tabular}{|*{6}{c|}}
     \hline
-\textbf{Nom du fichier} & \textbf{Ratio VirusTotal} & \textbf{Ratio Jotti} & \textbf{Ratio Virscan} \\
+    \textbf{Nom du fichier} & \multicolumn{3}{|c|}{\textbf{Ratio de détection}}\\
+    \hline
+  	 & \textbf{VirusTotal} & \textbf{Jotti} & \textbf{Virscan} \\
 	\hline
 payload.exe & 42/56 & 17/19 & 20/39\\
 	\hline
@@ -292,9 +311,11 @@ r.zip & 0/54 & 1/18 & 0/39\\
 \end{tabular}
 $ $\\
 \\
-Observations :\\
-Pour Virscan si un AV n'a pas trouvé de malware en moins de 60 Secondes alors le résultat est : "Rien n'a été trouvé".\\
-Tous les antivirus semble ne pas décompresser les format de type .lz, .lzma et .lzo.
+On remarque que les analyses témoins se déroulent correctement. A savoir, que notre payload est détecter par une grande majorité d'AV et que notre fichier inoffensif n'est pas détecté.\\
+Il existe des formats de compression qui ne sont pas reconnu par les AV puisque aucun d'entre eux ne nous alerte sur le coté malveillant des bombes.\\
+Le format le plus détecté est : tar.bz2.\\
+La variation du nombre total d'AV pour chaque site est dû à l'ajout ou à la suppression d'AV partenaire. Durant nos tests, VirusTotal comprenait entre 56 et 57 AV. Si cette valeur descend en dessous de 56, c'est qu'un ou plusieurs AV n'ont pas répondu dans les temps. Le nombre normal d'AV pour Jotti est compris entre 19 et 20.\\
+Il existe une limite de taille pour la soumission des fichiers sur chaque site. Comme nos bombes de compression dépasse largement cette limite (une fois décompressés), il existe une protection qui consiste à limiter le temps d'analyse alloué aux AV. Ainsi, pour Virscan si un AV n'a pas trouvé de malware en moins de 60 Secondes alors le résultat est : "Rien n'a été trouvé".\\
 $ $\\
 \\
 \begin{tabular}{|c|c|c|c|}
@@ -332,11 +353,37 @@ $ $\\
     \hline
 \end{tabular}
 $ $\\
-Observations :\\
-Nous pouvons remarquer que les antivirus ne sont pas configurés de la même manière selon les différents sites hormis VBA32. VBA32 semble être cohérent sur tous les sites sur lequel il est testé. En effet, rien de suspect pour VBA32 sur les fichier de 250Mo mais il y a une détection sur les fichiers de 500Mo. Après analyse approfondie : la limite de détection est de 315Mo.\\
+Nous pouvons remarquer que les résultats des antivirus sont cohérent sur un seul et même site mais ne semblent pas être configuré de la même manière entre les différentes plates-formes. Cependant, VBA32 semble avoir un comportement cohérent sur tous les sites sur lequel il est testé. En effet, rien de suspect pour VBA32 sur les fichier de 250Mo mais il y a une détection sur les bombes de 500Mo. Après analyse approfondie : la limite de détection est de 315Mo.\\
 ClamAV et Comodo analysent les fichiers sur Virscan et on remarque qu'il n'y a pas de différence entre la version installée et la version online : rien n'est détecté.\\
 $ $\\
-Résultats sur Mastiff et Viper :\\
+\begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+     \textbf{Nom fichier}  & \multicolumn{3}{|c|}{\textbf{Ratio de détection}} & \multicolumn{2}{|c|}{\textbf{Résultats}} \\
+    \hline
+     & VirusTotal & Jotti & Virscan & ClamAV & Comodo\\
+    \hline
+    payload.gz & 38/56 & 18/20 & 17/39 & Positif & Positif \\
+    \hline
+    payload.lz & 2/56 & 1/19 & 1/39 & Négatif & Négatif\\
+    \hline
+    payload.lzma & 7/56 & 4/19 & 4/39 & Négatif & Négatif\\
+    \hline
+    payload.lzo & 4/56 & 3/19 & 5/39 & Positif & Négatif \\
+    \hline
+    payload.tar.bz2 & 32/56 & 17/20 & 18/39 & Positif & Positif \\
+    \hline
+    payload.tar.gz & 33/56 & 17/20 & 16/39 & Positif & Positif\\
+    \hline
+    payload.tar.xz & 18/56 & 13/20 & 5/39 & Positif & Négatif \\
+    \hline
+    payload.zip & 40/56 & 18/20 & 12/39 & Positif & Positif\\
+    \hline
+\end{tabular}
+$ $\\Observations ...
+$ $\\
+\\
+Résultats pour Mastiff et Viper :\\
+On a pu remarquer que Mastiff analyse les fichiers compressés récursivement. Dans le cas de r.zip : un fichier qui se décompresse en un autre fichier compressé indéfiniment, Mastiff analyse ce nouveau fichier à chaque fois sans condition d’arrêt. Ce comportement peut occasionner l'envoie de requêtes de manière abondante vers VirusTotal lorsqu'on le spécifie dans le fichier de conf de Mastiff.\\
 $ $\\
 Résultats pour Suricata :\\
 

@@ -13,12 +13,15 @@
 % 4. Conclu
 
 \RequirePackage{fix-cm}
-\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+\documentclass{svjour3}
+%\documentclass[smallextended]{svjour3}       % onecolumn (second format)
 \smartqed  
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{tikz}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
 
 \begin{document}
 
@@ -45,11 +48,9 @@
 \maketitle
 
 \begin{abstract}
-$ $\\
-%Présentation de l'étude du comportement des outils défensif appliqué à un environnement de fichiers compressé par différents types d'algorithmes.\\
-%Cette étude permettra d'analyser le comportement des outils lorsqu'ils sont soumis à des fichiers compressés.
+Les logiciels de sécurité sont très important pour les entreprises qui collectent des millions de données personnelles sur ses utilisateurs. Ces logiciels fonctionnent de manière préventive, en temps réel, \textit{offline} ou encore \textit{online}. Il est aussi important que ces outils soient le plus robuste possible. C'est ce que nous allons tester avec les bombes de compression : fichiers compressés qui à la décompression engendrent des fichiers de très grande taille.
 
-\keywords{Bombe de compression \and IDS \and Antivirus \and Framework}
+\keywords{Bombe de compression \and IDS \and Antivirus \and \textit{Framework} d'analyse de malwares \and DoS}
 \end{abstract}
 
 %-------------------------------------------------------------
@@ -57,11 +58,9 @@ $ $\\
 %-------------------------------------------------------------
 \section{Introduction}
 \label{intro}
-%Selon l'étude de McAfee/CSIS de 2014, les pertes économique dues à la cybercriminalité représente 445 milliards de dollars par an, avec des attaques en forte hausse.\\
-%Le but de ce rapport est d'analyser le comportement des outils défensifs sur les fichiers compressés.\\
-%Est-ce que tous les formats de compression sont supportés ?\\
-%Le comportement des antivirus commun entre les sites sont-ils similaire ?\\
-%Est-ce que les bombes sont détectées ?\\
+Selon l'étude de McAfee/CSIS de 2014, les pertes économiques dues à la cybercriminalité représentent 445 milliards de dollars par an, avec des attaques en forte hausse. C'est pourquoi il existe des logiciels de sécurité pour pouvoir protéger nos données.\\
+Les bombes de compression sont créées avec des fichiers rempli d'un seul caractère mais répété de nombreuses fois. A l'image de 42.zip qui a une taille de 42 Ko compressé et une taille de 4.5 Po une fois décompressé. Si les logiciels de sécurité n'ont pas de protection suffisante pour analyser ce type de fichier, il est possible de provoquer un déni de service ou DoS.\\
+La Section 2 de ce rapport décrit les logiciels de sécurité sur lesquels nous avons testé leur robustesse à analyser des bombes de compression. La section 3 présente les résultats et analyses de nos tests.
 
 %-------------------------------------------------------------
 %	OUTILS DE SECURITE
@@ -82,11 +81,11 @@ Nous avons testé deux AV pour Linux : ClamAV (\url{www.clamav.net}) et Comodo (
 
 \subsection{Agrégateurs d'antivirus}
 \label{2.2agrégateurs}
-Les agrégateurs d'AV sont des outils qui permettent d'analyser des fichiers avec plusieurs AV en même temps. Cet outil ne doit pas remplacer un AV avec une analyse en temps réel installé sur une machine. Il existe deux types d’agrégateurs :  
+Les agrégateurs d'AV sont des outils qui permettent d'analyser des fichiers avec plusieurs AV en même temps. Cet outil ne doit pas remplacer un AV avec une analyse en temps réel installé sur une machine. Il existe deux types d’agrégateurs:  
 
 \subsubsection{Sites web}
 \label{2.2.1sites}
-Ces sites web spécialisés permettent d'analyser les fichiers grâce à des dizaines d'antivirus différents. Un partenariat relie les éditeurs d'AV et le site. Les éditeurs d'AV mettent à disposition des sites leur programme. Cela signifie que les éditeurs sont responsables de leur configuration. Il peut arriver qu'un AV soit configuré différemment sur un site par rapport à la version commerciale. En effet, il s'agit d'un bon moyen pour les éditeurs de tester de nouvelles fonctionnalités, configurations et d'inciter les utilisateurs à utiliser leur version commerciale. L'utilisation de plusieurs antivirus permet de combiner plusieurs algorithmes de détection et plusieurs bases de données. Lorsqu'un fichier est soumis par un utilisateur sur cette plate-forme, il est analysé par les moteurs des différents AV. Dans le cas où au moins un AV détecte un fichier comme malveillant, l'utilisateur est averti sur le caractère malicieux du fichier. Nous avons choisis 3 sites agrégateurs d'AV pour réaliser nos tests :
+Ces sites web spécialisés permettent d'analyser les fichiers grâce à des dizaines d'antivirus différents. Un partenariat relie les éditeurs d'AV et le site. Les éditeurs d'AV mettent à disposition des sites leur programme. Cela signifie que les éditeurs sont responsables de leur configuration. Il peut arriver qu'un AV soit configuré différemment sur un site par rapport à la version commerciale. En effet, il s'agit d'un bon moyen pour les éditeurs de tester de nouvelles fonctionnalités, configurations et d'inciter les utilisateurs à utiliser leur version commerciale. L'utilisation de plusieurs antivirus permet de combiner plusieurs algorithmes de détection et plusieurs bases de données. Lorsqu'un fichier est soumis par un utilisateur sur cette plate-forme, il est analysé par les moteurs des différents AV. Dans le cas où au moins un AV détecte un fichier comme malveillant, l'utilisateur est averti sur le caractère malicieux du fichier.
 \begin{table}[ht!]
 	\begin{center}
 		\begin{normalsize}
@@ -103,7 +102,7 @@ Ces sites web spécialisés permettent d'analyser les fichiers grâce à des diz
 			\end{tabular}
 		\end{normalsize}
 	\end{center}
-	\caption{Présentation des sites web.}
+	\caption{Présentation des 3 sites web agrégateurs d'AV que nous avons choisis pour réaliser nos test.}
 \end{table}
 \\
 \textit{Remarque} : VirusTotal est le plus populaire avec en moyenne 1.5M de soumissions par jours (dont 16.6\% provenant de France).\\
@@ -128,7 +127,7 @@ Mastiff et Viper permettent entre autre:
 \item De reconnaître deux fichiers dont le contenu est très similaire grâce au fuzzy hashing (ssdeep) (\url{ssdeep.sourceforge.net}). Technique permettant de calculer une signature d'un fichier sur des probabilités et sur le filtre de Bloom \cite{Bloom}. Ainsi, il est plus facile de mettre en relation deux fichiers avec un contenu proche mais pas identique. Le fonctionnement détaillé de cette méthode est décrite en \cite{Tournier}. Technique pratique pour repérer les malwares polymorphes.
 \item D'extraire et analyser récursivement des fichiers zip. C'est notamment cette dernière qui nous intéresse et que nous allons tester.
 \end{itemize}
-Mastiff est un programme dont le processus peut être exécuté dans un docker. Dans ce cas, un dossier est partagé entre la VM et le docker. Dans ce dossier, nous avons au préalable placé les fichiers à analyser par Mastiff. Dans le cas présent, nous n'avons pas de fichier confidentiel, c'est pourquoi nous avons ajouté l'option d'envoyer les fichiers à analyser vers VirusTotal automatiquement. Lors de son analyse, Mastiff génère un fichier de résultats par moteur d'analyse.\\
+Mastiff est un programme dont le processus peut être exécuté dans un docker\footnote{Un docker permet d'isoler l'exécution d'un processus dans un container virtuel. Plus léger qu'une machine virtuelle (VM) car c'est l'OS de la machine hôte qui est sollicité.}. Dans ce cas, un dossier est partagé entre la VM et le docker. Dans ce dossier, nous avons au préalable placé les fichiers à analyser par Mastiff. Dans le cas présent, nous n'avons pas de fichier confidentiel, c'est pourquoi nous avons ajouté l'option d'envoyer les fichiers à analyser vers VirusTotal automatiquement. Lors de son analyse, Mastiff génère un fichier de résultats par moteur d'analyse.\\
 $ $\\
 Viper est aussi un programme dont le processus peut s’exécuter dans un docker. A la différence que Viper met à notre disposition une interface web, à partir de laquelle nous pouvons soumettre nos fichiers. Une fois un fichier soumis, une multitude de commandes peuvent être lancées pour tester le fichier suspect. Les résultats de ces commandes se retrouvent sur cette interface web.\\
 
@@ -162,7 +161,7 @@ De plus, sur une autre machine nous avons installé un serveur web disposant des
 \label{3.1méthodologie}
 Dans un premier temps, nous avons généré un exécutable Windows (payload via metasploit) connu pour être analysé comme un malware par la plupart des outils disponibles sur le marché. Ensuite, pour chacun des outils, nous avons effectué une analyse témoin. Cette analyse se compose du fichier généré précédemment, et d'un fichier contenant uniquement des zéros et qui est donc complètement inoffensif.\\
 Dans un second temps, nous avons analysé les résultats des deux premiers fichiers compressés dans différents formats : .gz, .lzma, .tar.bz2, .tar.gz, .tar.xz, .lz, .lzo, .zip pour tenter de leurrer les AV. Il existe d'autres méthodes de contournement comme celles décrites dans~\cite{Contournement}.\\
-Enfin, nous avons utilisé des bombes de compression : des fichiers qui à la décompression engendre des fichiers de très grande taille, dans le but de provoquer un déni de service lors de l'exécution des AV.\\
+Enfin, nous avons utilisé des bombes de compression dans le but de provoquer un déni de service lors de l'exécution des AV.\\
 $ $\\
 Nous avons réalisé les tests (et installer les outils nécessaires) sur une machine ayant un OS Linux 3.13.0-32-generic (Ubuntu 12.04 LTS).
 \begin{table}[ht!]
@@ -208,54 +207,54 @@ Comodo ne nous permet pas de modifier des paramètres comme la récursion, ou la
    & Résultats & Temps & Résultats & Temps \\
   \hline
   \hline
-payload.exe & Positif & 9.2s & Positif & 4s\\
+payload.exe & \checkmark & 9.2s & \checkmark & 4s\\
 	\hline
-fichier\_inoffensif & Négatif & 8.9s & Négatif & 4s\\
+fichier\_inoffensif & \textsf{X} & 8.9s & \textsf{X} & 4s\\
 	\hline
 	\hline
-250Mo.gz &  Négatif  & 9.6s & Négatif & 8s\\
+250Mo.gz &  \textsf{X}  & 9.6s & \textsf{X} & 8s\\
 	\hline
-1Go.gz &  Négatif  & 10s & Négatif & 20s\\
+1Go.gz &  \textsf{X}  & 10s & \textsf{X} & 20s\\
     \hline
     \hline
-250Mo.lz &  Négatif  & 8.7s & Négatif & 4s\\
+250Mo.lz &  \textsf{X}  & 8.7s & \textsf{X} & 4s\\
 	\hline
-1Go.lz &  Négatif & 8.2s & Négatif & 4s\\
+1Go.lz &  \textsf{X} & 8.2s & \textsf{X} & 4s\\
     \hline
     \hline
-250Mo.lzma &  Négatif  &  8.3s & Négatif & 4s\\
+250Mo.lzma &  \textsf{X}  &  8.3s & \textsf{X} & 4s\\
 	\hline
-1Go.lzma &  Négatif  & 8.7s & Négatif & 4s\\
+1Go.lzma &  \textsf{X}  & 8.7s & \textsf{X} & 4s\\
     \hline
     \hline
-250Mo.lzo &   Négatif & 8.3s & Négatif & 4s\\
+250Mo.lzo &   \textsf{X} & 8.3s & \textsf{X} & 4s\\
 	\hline
-1Go.lzo &  Négatif  & 8.6s & Négatif & 4s\\
+1Go.lzo &  \textsf{X}  & 8.6s & \textsf{X} & 4s\\
     \hline
     \hline
-250Mo.tar.bz2 &  Négatif & 11.9s & Négatif & 14s\\
+250Mo.tar.bz2 &  \textsf{X} & 11.9s & \textsf{X} & 14s\\
 	\hline
-1Go.tar.bz2 &  Négatif  &  12.5s & Négatif & 54s\\
+1Go.tar.bz2 &  \textsf{X}  &  12.5s & \textsf{X} & 54s\\
     \hline
     \hline
-250Mo.tar.gz &   Négatif & 9.7s & Négatif & 11s\\
+250Mo.tar.gz &   \textsf{X} & 9.7s & \textsf{X} & 11s\\
 	\hline
-1Go.tar.gz &  Négatif  & 9.8s & Négatif & 52s\\
+1Go.tar.gz &  \textsf{X}  & 9.8s & \textsf{X} & 52s\\
     \hline
     \hline
-250Mo.tar.xz &  Négatif  & 10s & Négatif & 4s\\
+250Mo.tar.xz &  \textsf{X}  & 10s & \textsf{X} & 4s\\
 	\hline
-1Go.tar.xz &  Négatif$^1$  &  10s & Négatif & 4s\\
+1Go.tar.xz &  \textsf{X}$^1$  &  10s & \textsf{X} & 4s\\
     \hline
     \hline
-250Mo.zip &   Négatif & 12s & Négatif & 8s\\
+250Mo.zip &   \textsf{X} & 12s & \textsf{X} & 8s\\
 	\hline
-1Go.zip &   Négatif & 25.7s & Négatif & 21s\\
+1Go.zip &   \textsf{X} & 25.7s & \textsf{X} & 21s\\
     \hline
     \hline
-r.zip & Négatif$^2$ & 8.4s & Négatif & 4s\\
+r.zip & \textsf{X}$^2$ & 8.4s & \textsf{X} & 4s\\
 	\hline
-42.tar.bz2 & Négatif  & 10.9s & Négatif & 6s$^3$\\
+42.tar.bz2 & \textsf{X}  & 10.9s & \textsf{X} & 6s$^3$\\
 	\hline
 \end{tabular}
 \end{center}
@@ -330,11 +329,11 @@ r.zip & 0/55 & 1/18 & 0/39\\
 \caption{Résultats pour les sites web agrégateurs d'AV}
 \end{normalsize}
 \end{table}
-\\On remarque que les analyses témoins se déroulent correctement. A savoir, que notre payload est détecter par une grande majorité d'AV et que notre fichier inoffensif n'est pas détecté.\\
+\\On remarque que les analyses témoins se déroulent correctement. A savoir, que notre payload est détecté par une grande majorité d'AV et que notre fichier inoffensif n'est pas détecté.\\
 Il existe des formats de compression qui ne sont pas reconnus par les AV puisque aucun d'entre eux ne nous alerte sur le coté malveillant des bombes.\\
 Le format le plus détecté est : tar.bz2.\\
 La variation du nombre total d'AV pour chaque site est dû à l'ajout ou à la suppression d'AV partenaire. Durant nos tests, VirusTotal comprenait entre 56 et 57 AV. Si cette valeur descend en dessous de 56, c'est qu'un ou plusieurs AV n'ont pas répondu dans les temps. Le nombre normal d'AV pour Jotti est compris entre 19 et 20.\\
-Il existe une limite de taille pour la soumission des fichiers sur chaque site. Comme nos bombes de compression dépasse largement cette limite (une fois décompressés), il existe une protection qui consiste à limiter le temps d'analyse alloué aux AV. Ainsi, pour Virscan si un AV n'a pas trouvé de malware en moins de 60 Secondes alors le résultat est : "Rien n'a été trouvé".
+Il existe une limite de taille pour la soumission des fichiers sur chaque site. Comme nos bombes de compression dépassent largement cette limite (une fois décompressées), il existe une protection qui consiste à limiter le temps d'analyse alloué aux AV. Ainsi, pour Virscan si un AV n'a pas trouvé de malware en moins de 60 secondes alors le résultat est : "Rien n'a été trouvé".
 \begin{table}[ht!]
 \begin{tabular}{|c|c|c|c|}
     \hline
@@ -372,7 +371,7 @@ Il existe une limite de taille pour la soumission des fichiers sur chaque site. 
 \end{tabular}
 \caption{Antivirus ayant détectés un malware.}
 \end{table}
-\\Nous pouvons remarquer que les résultats des antivirus sont cohérent sur un seul et même site mais ne semblent pas être configuré de la même manière entre les différentes plates-formes. Cependant, VBA32 semble avoir un comportement cohérent sur tous les sites sur lequel il est testé. En effet, rien de suspect pour VBA32 sur les fichier de 250Mo mais il y a une détection sur les bombes de 500Mo. Après analyse approfondie : la limite de détection est de 315Mo.\\
+\\Nous pouvons remarquer que les résultats des antivirus sont cohérents sur un seul et même site mais ne semblent pas être configurés de la même manière entre les différentes plates-formes. Cependant, VBA32 semble avoir un comportement cohérent sur tous les sites sur lequel il est testé. En effet, rien de suspect pour VBA32 sur les fichiers de 250Mo mais il y a une détection sur les bombes de 500Mo. Après analyse approfondie : la limite de détection est de 315Mo.\\
 ClamAV et Comodo analysent les fichiers sur Virscan et on remarque qu'il n'y a pas de différence entre la version installée et la version online : rien n'est détecté.\\
 \begin{table}[ht!]
 \begin{normalsize}
@@ -399,7 +398,7 @@ ClamAV et Comodo analysent les fichiers sur Virscan et on remarque qu'il n'y a p
 \caption{Récapitulatif des AV ayant un temps de réponse dépassé.}
 \end{table}
 \\
-Il soit être possible de provoquer un deni de service, dans certaines conditions sur ces AV.
+Il doit être possible de provoquer un deni de service, dans certaines conditions sur ces AV.
 \begin{table}[ht!]
 \begin{normalsize}
 \begin{center}
@@ -409,42 +408,47 @@ Il soit être possible de provoquer un deni de service, dans certaines condition
     \hline
      & VirusTotal & Jotti & Virscan & ClamAV & Comodo\\
      \hline
-    analyse témoin & 42/56 & 17/19 & 20/39 & Positif & Positif \\
+    analyse témoin & 42/56 & 17/19 & 20/39 & \checkmark & \checkmark \\
     \hline
-    payload.gz & 38/56 & 18/20 & 17/39 & Positif & Positif \\
+    payload.gz & 38/56 & 18/20 & 17/39 & \checkmark & \checkmark \\
     \hline
-    payload.lz & 2/56 & 1/19 & 1/39 & Négatif & Négatif\\
+    payload.lz & 2/56 & 1/19 & 1/39 & \textsf{X} & \textsf{X}\\
     \hline
-    payload.lzma & 7/56 & 4/19 & 4/39 & Négatif & Négatif\\
+    payload.lzma & 7/56 & 4/19 & 4/39 & \textsf{X} & \textsf{X}\\
     \hline
-    payload.lzo & 4/56 & 3/19 & 5/39 & Positif & Négatif \\
+    payload.lzo & 4/56 & 3/19 & 5/39 & \checkmark & \textsf{X} \\
     \hline
-    payload.tar.bz2 & 32/56 & 17/20 & 18/39 & Positif & Positif \\
+    payload.tar.bz2 & 32/56 & 17/20 & 18/39 & \checkmark & \checkmark \\
     \hline
-    payload.tar.gz & 33/56 & 17/20 & 16/39 & Positif & Positif\\
+    payload.tar.gz & 33/56 & 17/20 & 16/39 & \checkmark & \checkmark\\
     \hline
-    payload.tar.xz & 18/56 & 13/20 & 5/39 & Positif & Négatif \\
+    payload.tar.xz & 18/56 & 13/20 & 5/39 & \checkmark & \textsf{X} \\
     \hline
-    payload.zip & 40/56 & 18/20 & 12/39 & Positif & Positif\\
+    payload.zip & 40/56 & 18/20 & 12/39 & \checkmark & \checkmark\\
     \hline
 \end{tabular}
 \end{center}
 \end{normalsize}
 \end{table}
-
-Le fait de compresser le payload dans un format très répandu comme (.zip) leurre qu'une petite minorité d'AV. En revanche, compresser le payload dans un format qui n'est pas très répandu (.lz) permet de leurrer jusqu'à 97\% des AV du marché.
+\newpage
+Le fait de compresser le payload dans un format très répandu comme (.zip) leurre qu'une petite minorité d'AV. En revanche, compresser le payload dans un format qui n'est pas très répandu (.lz) permet de leurrer jusqu'à 95\% des antivirus.
 $ $\\
 \\
 Résultats pour Mastiff et Viper :\\
-On a pu remarquer que Mastiff analyse les fichiers compressés récursivement. Dans le cas de r.zip : un fichier qui se décompresse en un autre fichier compressé indéfiniment, Mastiff analyse ce nouveau fichier à chaque fois sans condition d’arrêt. Ce comportement peut occasionner l'envoie de requêtes de manière abondante vers VirusTotal lorsqu'on le spécifie dans le fichier de configuration de Mastiff.\\
+On a pu remarquer que Mastiff analyse les fichiers compressés récursivement. Dans le cas de r.zip : un fichier qui se décompresse en un autre fichier compressé indéfiniment, Mastiff analyse ce nouveau fichier à chaque fois et cela sans condition d’arrêt. Ce comportement peut occasionner l'envoie de requêtes de manière abondante vers VirusTotal lorsqu'on le spécifie dans le fichier de configuration de Mastiff.\\
 $ $\\
 Résultats pour Suricata :\\
+Lors du téléchargement des bombes de compression, on observe que les règles créer se déclenchent bien et ainsi remontent des alertes dans le fichiers de logs. Cependant, on ne constate pas de déni de service.
 
 %-------------------------------------------------------------
 %	CONCLUSION
 %-------------------------------------------------------------
 \section{Conclusion}
-\label{2.3ids}
+\label{2.3conclusion}
+Nous avons compressé un fichier malveillant dans différents formats. Et il s’avère que la plupart des antivirus du marché ne reconnaissent pas tout les formats de compression. Ainsi, le simple fait de compresser un malware dans le format .lz permet de leurrer jusqu’à 95\% des AV qui avaient détecté ce même malware sans compression.\\
+Ensuite, l'analyse des bombes de compression par les logiciels de sécurité, permet de mettre en évidence le fait qu'il existe des protections contre les DoS. Mais qu'elles ne sont pas tout le temps suffisantes. En effet, certain AV des sites web n'ont pas répondu dans les temps lors de certaines analyses. Une erreur de segmentation est survenue en poussant jusqu'à 400 la profondeur maximale dans ClamAV. Mastiff ne s’arrête jamais lors de l'analyse de r.zip. Enfin, les antivirus comme ClamAV et Comodo ne détectent jamais les bombes de compression.\\
+Qu'en est il pour un éventail plus large d'antivirus installés sur un environnement Windows ?
+
 
 \begin{thebibliography}{}
 %

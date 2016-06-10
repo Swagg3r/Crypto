@@ -48,7 +48,7 @@
 \maketitle
 
 \begin{abstract}
-Les logiciels de sécurité sont très important pour les entreprises qui collectent des millions de données personnelles sur ses utilisateurs. Ces logiciels fonctionnent de manière préventive, en temps réel, \textit{offline} ou encore \textit{online}. Il est aussi important que ces outils soient le plus robuste possible. C'est ce que nous allons tester avec les bombes de compression : fichiers compressés qui à la décompression engendrent des fichiers de très grande taille.
+Les logiciels de sécurité sont très importants pour les entreprises qui collectent des millions de données personnelles sur ses utilisateurs. Ces logiciels fonctionnent de manière préventive, en temps réel, \textit{offline} ou encore \textit{online}. Il est aussi important que ces outils soient le plus robuste possible. C'est ce que nous allons tester avec les bombes de compression : fichiers compressés qui à la décompression engendrent des fichiers de très grande taille.
 
 \keywords{Bombe de compression \and IDS \and Antivirus \and \textit{Framework} d'analyse de malwares \and DoS}
 \end{abstract}
@@ -59,8 +59,8 @@ Les logiciels de sécurité sont très important pour les entreprises qui collec
 \section{Introduction}
 \label{intro}
 Selon l'étude de McAfee/CSIS de 2014, les pertes économiques dues à la cybercriminalité représentent 445 milliards de dollars par an, avec des attaques en forte hausse. C'est pourquoi il existe des logiciels de sécurité pour pouvoir protéger nos données.\\
-Les bombes de compression sont créées avec des fichiers rempli d'un seul caractère mais répété de nombreuses fois. A l'image de 42.zip qui a une taille de 42 Ko compressé et une taille de 4.5 Po une fois décompressé. Si les logiciels de sécurité n'ont pas de protection suffisante pour analyser ce type de fichier, il est possible de provoquer un déni de service ou DoS.\\
-La Section 2 de ce rapport décrit les logiciels de sécurité sur lesquels nous avons testé leur robustesse à analyser des bombes de compression. La section 3 présente les résultats et analyses de nos tests.
+Les bombes de compression sont créées avec des fichiers remplis d'un seul caractère mais répété de nombreuses fois. A l'image de 42.zip qui a une taille de 42 Ko compressé et une taille de 4.5 Po une fois décompressé. Si les logiciels de sécurité n'ont pas de protection suffisante pour analyser ce type de fichier, il est possible de provoquer un déni de service ou DoS.\\
+La Section 2 de ce rapport décrit les logiciels de sécurité sur lesquels nous avons testé leur robustesse à analyser des bombes de compression. La Section 3 présente les résultats et analyses de nos tests.
 
 %-------------------------------------------------------------
 %	OUTILS DE SECURITE
@@ -72,7 +72,7 @@ La Section 2 de ce rapport décrit les logiciels de sécurité sur lesquels nous
 \label{2.1antivirus}
 Les antivirus (AV) sont des programmes très importants en sécurité. Ce sont des programmes installés sur les machines des utilisateurs et ils permettent de détecter les malwares et les empêchent de s’exécuter sur le système. Il existe différentes manières de détecter un malware : 
 \begin{itemize}
-\item scan par signature : on calcule la signature d'un fichier ou d'un morceau de code et on le compare à une base de données. C'est la méthode la plus populaire chez les concepteurs d'antivirus. Cette méthode est cependant inefficace contre les malwares polymorphes ou capable de changer leur signature.
+\item scan par signature : on calcule la signature d'un fichier ou d'un morceau de code et on le compare à une base de données. C'est la méthode la plus populaire chez les concepteurs d'antivirus. Cette méthode est cependant inefficace contre les malwares polymorphes ou capablent de changer leur signature.
 \item Analyse heuristique : la plus puissante des méthodes car elle permet de simuler l’exécution du code d'un programme dans une zone contrôlée. Ainsi, l'AV peut observer le comportement du code qui s’exécute et définir s'il s'agit d'un malware ou non. Cette méthode peut provoquer des fausses alertes, coûte du temps CPU et ne garantie pas toujours un résultat.
 \item Contrôle d'intégrité : permet de vérifier qu'un fichier sensible n'a pas été modifié au cours du temps. Les informations comme : les droits (d'exécuter, de modifier ...), les propriétaires, sont comparées à des références lors de la demande d'ouverture du fichier (si analyse en temps réel) ou lors d'un scan de l'AV. Si une anomalie apparaît, l'AV alerte l'utilisateur.\\
 \end{itemize}
@@ -99,10 +99,12 @@ Ces sites web spécialisés permettent d'analyser les fichiers grâce à des diz
   			\hline
   			Type d’hébergement & Cloud & Cloud & Cloud\\
   			\hline
+  			Lien & \url{www.virustotal.com} & \url{virusscan.jotti.org} & \url{virscan.org} \\
+  			\hline
 			\end{tabular}
 		\end{normalsize}
 	\end{center}
-	\caption{Présentation des 3 sites web agrégateurs d'AV que nous avons choisis pour réaliser nos test.}
+	\caption{Présentation des 3 sites web agrégateurs d'AV que nous avons choisi pour réaliser nos tests.}
 \end{table}
 \\
 \textit{Remarque} : VirusTotal est le plus populaire avec en moyenne 1.5M de soumissions par jours (dont 16.6\% provenant de France).\\
@@ -118,12 +120,12 @@ Ce type d'outils fonctionne en local, idéalement sur une machine virtuelle pour
 \label{2.2.2frameworks}
 \begin{itemize}
 \item Mastiff, \url{www.korelogic.com}, société basée au USA, composée de professionnels en sécurité informatique.
-\item Viper, \url{www.viper.li}, créer par Claudio Guarnieri, chercheur en sécurité informatique.
+\item Viper, \url{www.viper.li}, créé par Claudio Guarnieri, chercheur en sécurité informatique.
 \end{itemize}
 Ces deux outils sont pré-installés dans la distribution REMnux (\url{remnux.org}) qu'il est facile d'importer dans Virtualbox (\url{www.virtualbox.org}).\\
 Mastiff et Viper permettent entre autre:
 \begin{itemize}
-\item d’identifier et classer le type des fichiers analysés grâce aux règles de YARA : un outil qui identifie et classe les malwares grâce a des règles, (\url{plusvic.github.io/yara}).
+\item d’identifier et classer le type des fichiers analysés grâce aux règles de YARA : un outil qui identifie et classe les malwares grâce à des règles, (\url{plusvic.github.io/yara}).
 \item De reconnaître deux fichiers dont le contenu est très similaire grâce au fuzzy hashing (ssdeep) (\url{ssdeep.sourceforge.net}). Technique permettant de calculer une signature d'un fichier sur des probabilités et sur le filtre de Bloom \cite{Bloom}. Ainsi, il est plus facile de mettre en relation deux fichiers avec un contenu proche mais pas identique. Le fonctionnement détaillé de cette méthode est décrite en \cite{Tournier}. Technique pratique pour repérer les malwares polymorphes.
 \item D'extraire et analyser récursivement des fichiers zip. C'est notamment cette dernière qui nous intéresse et que nous allons tester.
 \end{itemize}
@@ -136,15 +138,15 @@ Viper est aussi un programme dont le processus peut s’exécuter dans un docker
 Les systèmes de détection d'intrusion (IDS) sont des programmes permettant d'analyser le trafic réseau de manière transparente. Idéalement l'IDS est situé au point d'entrer du réseau d'une entreprise pour pouvoir analyser tout le trafic réseau. L'IDS fonctionne sur un système de règles et de pattern matching. Un administrateur définit un certain nombre de règles que l'IDS doit vérifier lors de l'analyse du trafic réseau. Suivant les règles que l’administrateur a définies, l'IDS permet :
 \begin{itemize}
 \item de laisser passer un paquet sans finir l'analyse.
-\item rejeter le paquet, en générant des paquets ICMP erreur ainsi qu'une alerte
-\item générer une alerte dans le fichier de logs.
+\item Rejeter le paquet, en générant des paquets ICMP erreur ainsi qu'une alerte.
+\item Générer une alerte dans le fichier de logs.
 \end{itemize} 
 Par exemple, l'administrateur peut décider de créer une règle  qui générera une alerte lors qu'une connexion sera établie sur les serveurs de Facebook. Cette alerte permet d'identifier l'adresse IP source de la requête HTTP.\\
 L'analyse s'effectue aussi sur le contenu des paquets qui circulent sur le réseau. De cette manière une règle peut être créée pour générer une alerte lorsqu'un paquet contient les caractères "Euro 2016" par exemple.\\
 L'IDS que nous avons choisi de tester est Suricata \cite{Suricata}. Suricata se démarque de la concurrence (snort en particulier) par une analyse multithread. C'est une caractéristique importante. L'article de David J. Day et Benjamin M. Burns \cite{PerformanceAnalysis}  analyse les performances de Suricata. Suricata supporte nativement l'IPv6 et est open source. Suricata extrait les fichiers compressés pour analyser leur contenu \cite{SuricataExtraction}. Le but de l’étude est de vérifier qu'il n'y a pas de déni de service possible lorsque Suricata analyse une bombe de compression.\\
 Après avoir installé Suricata, nous avons rédigé des règles pour que les fichiers soient décompressés puis inspectés. Nous avons pris soin de modifier la configuration initiale de Suricata pour que l'extraction se passe de manière optimale:
 \begin{itemize}
-\item stream.reassembly.depth = 4gb, après avoir réassemblé le flux TCP, le fichier ne doit pas dépasser une taille de 4Go.
+\item stream.reassembly.depth = 4000, après avoir réassemblé le flux TCP, le fichier ne doit pas dépasser une taille de 4Go.
 \item request\_body\_limit = 0 (infini), valeur que le corps de la requête HTTP ne peut pas dépasser.
 \item response\_body\_limit = 0 (infini), valeur que le corps de la réponse HTTP ne peut pas dépasser.
 \end{itemize}
@@ -163,7 +165,7 @@ Dans un premier temps, nous avons généré un exécutable Windows (payload via 
 Dans un second temps, nous avons analysé les résultats des deux premiers fichiers compressés dans différents formats : .gz, .lzma, .tar.bz2, .tar.gz, .tar.xz, .lz, .lzo, .zip pour tenter de leurrer les AV. Il existe d'autres méthodes de contournement comme celles décrites dans~\cite{Contournement}.\\
 Enfin, nous avons utilisé des bombes de compression dans le but de provoquer un déni de service lors de l'exécution des AV.\\
 $ $\\
-Nous avons réalisé les tests (et installer les outils nécessaires) sur une machine ayant un OS Linux 3.13.0-32-generic (Ubuntu 12.04 LTS).
+Nous avons réalisé les tests (et installé les outils nécessaires) sur une machine ayant un OS Linux 3.13.0-32-generic (Ubuntu 12.04 LTS).
 \begin{table}[ht!]
 	\begin{center}
 		\begin{normalsize}
@@ -191,10 +193,9 @@ Nous avons réalisé les tests (et installer les outils nécessaires) sur une ma
 \\Pour l'utilisation de ClamAV deux paramètres sont à prendre en compte pour mener à bien cette expérience :
 \begin{itemize}
 \item "max-recursion= $n$" : la profondeur maximale d'exploration lors d'une décompression, 16 par défaut.
-\item "max-filesize= $n$" : Extrait et analyse  n octets de chaque archives. 25 Mo par défaut avec une limite de 4 Go.
+\item "max-filesize= $n$" : extrait et analyse $n$ octets de chaque archive. 25 Mo par défaut avec une limite de 4 Go.
 \end{itemize}
 Comodo ne nous permet pas de modifier des paramètres comme la récursion, ou la taille des fichiers analysés.
-
 \subsection{Résultats et observations}
 \label{3.2résultats}
 \begin{table}[ht!]
@@ -261,6 +262,7 @@ r.zip & \textsf{X}$^2$ & 8.4s & \textsf{X} & 4s\\
 \caption{Récapitulatif des analyses de \textbf{ClamAV} et \textbf{Comodo}}
 \end{normalsize}
 \end{table}
+$ $\\
 $^1$ : Warning constaté lors de la décompression pour 1Go.tar.xz, "decompress file size exceeds limits - only scanning 104857600 bytes".\\
 $^2$ : En forçant environ 400 récursions (au lieu de 16 par défaut), il y a une erreur de segmentation.\\
 $^3$ : Limite de récursion atteinte mais non connue. Utilisation du CPU très importante lors de l'analyse d'une sous partie de 42.tar.bz2.\\
@@ -320,17 +322,18 @@ fichier\_inoffensif & 0/56 & 0/19  & 0/39 \\
 1Go.zip & 2/55 & 3/20 & 0/39\\
     \hline
     \hline
-r.zip & 0/55 & 1/18 & 0/39\\
+r.zip & 0/55 & 1/18$^1$ & 0/39\\
 	\hline
 42.tar.bz2 & 1/56 & 4/15 & 0/39\\
 	\hline
 \end{tabular}
 \end{center}
-\caption{Résultats pour les sites web agrégateurs d'AV}
+\caption{Résultats pour les sites web agrégateurs d'AV.}
 \end{normalsize}
 \end{table}
-\\On remarque que les analyses témoins se déroulent correctement. A savoir, que notre payload est détecté par une grande majorité d'AV et que notre fichier inoffensif n'est pas détecté.\\
-Il existe des formats de compression qui ne sont pas reconnus par les AV puisque aucun d'entre eux ne nous alerte sur le coté malveillant des bombes.\\
+\\$^1$ : Le seuil de détection de Sophos est de 6 récursions de compression. En dessous de ce seuil, aucun des AV ne détectent le fichier comme une bombe de compression.\\
+On remarque que les analyses témoins se déroulent correctement. A savoir, que notre payload est détecté par une grande majorité d'AV et que notre fichier inoffensif n'est pas détecté.\\
+Il existe des formats de compression qui ne sont pas reconnus par les AV puisque aucun d'entre eux ne nous alertent sur le coté malveillant des bombes.\\
 Le format le plus détecté est : tar.bz2.\\
 La variation du nombre total d'AV pour chaque site est dû à l'ajout ou à la suppression d'AV partenaire. Durant nos tests, VirusTotal comprenait entre 56 et 57 AV. Si cette valeur descend en dessous de 56, c'est qu'un ou plusieurs AV n'ont pas répondu dans les temps. Le nombre normal d'AV pour Jotti est compris entre 19 et 20.\\
 Il existe une limite de taille pour la soumission des fichiers sur chaque site. Comme nos bombes de compression dépassent largement cette limite (une fois décompressées), il existe une protection qui consiste à limiter le temps d'analyse alloué aux AV. Ainsi, pour Virscan si un AV n'a pas trouvé de malware en moins de 60 secondes alors le résultat est : "Rien n'a été trouvé".
@@ -429,23 +432,25 @@ Il doit être possible de provoquer un deni de service, dans certaines condition
 \end{tabular}
 \end{center}
 \end{normalsize}
+\caption{Récapitulatif de la dissimulation du payload.}
 \end{table}
-\newpage
-Le fait de compresser le payload dans un format très répandu comme (.zip) leurre qu'une petite minorité d'AV. En revanche, compresser le payload dans un format qui n'est pas très répandu (.lz) permet de leurrer jusqu'à 95\% des antivirus.
+\\Le fait de compresser le payload dans un format très répandu comme (.zip) leurre qu'une petite minorité d'AV. En revanche, compresser le payload dans un format qui n'est pas très répandu (.lz) permet de leurrer jusqu'à 95\% des antivirus.
 $ $\\
 \\
 Résultats pour Mastiff et Viper :\\
 On a pu remarquer que Mastiff analyse les fichiers compressés récursivement. Dans le cas de r.zip : un fichier qui se décompresse en un autre fichier compressé indéfiniment, Mastiff analyse ce nouveau fichier à chaque fois et cela sans condition d’arrêt. Ce comportement peut occasionner l'envoie de requêtes de manière abondante vers VirusTotal lorsqu'on le spécifie dans le fichier de configuration de Mastiff.\\
 $ $\\
+Après avoir soumis un fichier à Viper via l'interface web, Viper extrait l'archive entièrement. Pendant l'extraction l'utilisation du CPU (de la VM) est de 100\% et un ralentissement se fait alors ressentir. Plus les fichiers à extraire sont de taille importante et plus l'extraction est longue.\\
+$ $\\
 Résultats pour Suricata :\\
-Lors du téléchargement des bombes de compression, on observe que les règles créer se déclenchent bien et ainsi remontent des alertes dans le fichiers de logs. Cependant, on ne constate pas de déni de service.
+Lors du téléchargement des bombes de compression, on observe que les règles créer se déclenchent bien et ainsi remontent des alertes dans le fichier de logs. Cependant, on ne constate pas de déni de service.
 
 %-------------------------------------------------------------
 %	CONCLUSION
 %-------------------------------------------------------------
 \section{Conclusion}
 \label{2.3conclusion}
-Nous avons compressé un fichier malveillant dans différents formats. Et il s’avère que la plupart des antivirus du marché ne reconnaissent pas tout les formats de compression. Ainsi, le simple fait de compresser un malware dans le format .lz permet de leurrer jusqu’à 95\% des AV qui avaient détecté ce même malware sans compression.\\
+Nous avons compressé un fichier malveillant dans différents formats. Et il s’avère que la plupart des antivirus du marché ne reconnaissent pas tous les formats de compression. Ainsi, le simple fait de compresser un malware dans le format .lz permet de leurrer jusqu’à 95\% des AV qui avaient détecté ce même malware sans compression.\\
 Ensuite, l'analyse des bombes de compression par les logiciels de sécurité, permet de mettre en évidence le fait qu'il existe des protections contre les DoS. Mais qu'elles ne sont pas tout le temps suffisantes. En effet, certain AV des sites web n'ont pas répondu dans les temps lors de certaines analyses. Une erreur de segmentation est survenue en poussant jusqu'à 400 la profondeur maximale dans ClamAV. Mastiff ne s’arrête jamais lors de l'analyse de r.zip. Enfin, les antivirus comme ClamAV et Comodo ne détectent jamais les bombes de compression.\\
 Qu'en est il pour un éventail plus large d'antivirus installés sur un environnement Windows ?
 

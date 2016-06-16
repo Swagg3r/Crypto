@@ -1,0 +1,113 @@
+\documentclass{article}           %% ceci est un commentaire (apres le caractere %)
+\usepackage[utf8]{inputenc}     %% adapte le style article aux conventions francophones
+\usepackage[T1]{fontenc}          %% permet d'utiliser les caractères accentués
+\usepackage[dvips]{graphicx}      %% permet d'importer des graphiques au format .EPS (postscript)
+\usepackage{fancybox}		   %% package utiliser pour avoir un encadré 3D des images
+\usepackage{makeidx}              %% permet de générer un index automatiquement
+\usepackage{multirow}
+\title{}     %% \title est une macro, entre { } figure son premier argument
+\author{}        %% idem
+
+\makeindex		    %% macro qui permet de générer l'index
+\bibliographystyle{prsty}	  %% le style utilisé pour créer la bibliographie
+\begin{document}                  %% signale le début du document
+
+\begin{table}[ht!]
+\begin{normalsize}
+\begin{center}
+\begin{tabular}{|l|l|c|c|c|c|c|}
+    \hline
+     \textbf{Step} & \textbf{Name}  & \multicolumn{2}{|c|}{\textbf{Anti-virus}} & \multicolumn{3}{|c|}{\textbf{Aggregator}} \\
+    \hline
+     & & ClamAV & Comodo & VirusTotal & Jotti & Virscan \\
+      \hline \hline
+    Step 1 & payload &  &  &  &  &  \\ \cline{2-7}
+    
+    & harmless file &  &  &  &  &  \\
+    \hline \hline
+    Step 2 & payload.gz &  &  &  &  &  \\
+    \cline{2-7}
+    & payload.lz &  &  &  & \textsf{X} & \\
+    \cline{2-7}
+    & payload.lzma &  &  &  &  & \\
+    \cline{2-7}
+    & payload.lzo &  &  &  &  &  \\
+    \cline{2-7}
+    & payload.tar.bz2 &  &  &  &  &  \\
+    \cline{2-7}
+    & payload.tar.gz &  &  &  &  & \\
+    \cline{2-7}
+    & payload.tar.xz &  &  &  &  &  \\
+    \cline{2-7}
+    & payload.zip &  &  &  &  & \\
+    \hline \hline
+    Step 3 	& 250Mo.gz &  &  &  &  &  \\
+    \cline{2-7}
+    			& 500Mo.gz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 1Go.gz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 2Go.gz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 250Mo.lz &  &  &  &  &  \\
+    \cline{2-7}
+    			& 500Mo.lz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 1Go.lz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 2Go.lz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 250Mo.lzma &  &  &  &  &  \\
+    \cline{2-7}
+    			& 500Mo.lzma &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 1Go.lzma &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 2Go.lzma &  &  &  &  &  \\
+    \cline{2-7}
+    			& 250Mo.lzo &  &  &  &  &  \\
+    \cline{2-7}
+    			& 500Mo.lzo &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 1Go.lzo &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 2Go.lzo &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 250Mo.tar.bz2 &  &  &  &  &  \\
+    \cline{2-7}
+    			& 500Mo.tar.bz2 &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 1Go.tar.bz2 &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 2Go.tar.bz2 &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 250Mo.tar.gz &  &  &  &  &  \\
+    \cline{2-7}
+    			& 500Mo.tar.gz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 1Go.tar.gz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 2Go.tar.gz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 250Mo.tar.xz &  &  &  &  &  \\
+    \cline{2-7}
+    			& 500Mo.tar.xz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 1Go.tar.xz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 2Go.tar.xz &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 250Mo.zip &  &  &  &  &  \\
+    \cline{2-7}
+    			& 500Mo.zip &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 1Go.zip &  &  &  &  &  \\
+    	\cline{2-7}
+    			& 2Go.zip &  &  &  &  &  \\
+    \hline
+\end{tabular}
+\end{center}
+\end{normalsize}
+\end{table}
+
+\end{document}

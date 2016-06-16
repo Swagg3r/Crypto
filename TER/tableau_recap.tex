@@ -1,0 +1,43 @@
+\documentclass{article}           %% ceci est un commentaire (apres le caractere %)
+\usepackage[latin1]{inputenc}     %% adapte le style article aux conventions francophones
+\usepackage[T1]{fontenc}          %% permet d'utiliser les caractères accentués
+\usepackage[dvips]{graphicx}      %% permet d'importer des graphiques au format .EPS (postscript)
+\usepackage{fancybox}		   %% package utiliser pour avoir un encadré 3D des images
+\usepackage{makeidx}              %% permet de générer un index automatiquement
+\usepackage{multirow}
+\title{}     %% \title est une macro, entre { } figure son premier argument
+\author{}        %% idem
+
+\makeindex		    %% macro qui permet de générer l'index
+\bibliographystyle{prsty}	  %% le style utilisé pour créer la bibliographie
+\begin{document}                  %% signale le début du document
+
+Tableau :
+\begin{table}[ht!]
+	\begin{center}
+		\begin{normalsize}
+			\begin{tabular}{|l|l|}
+    				\hline
+     			\textbf{Name} & \textbf{Type}\\
+                \hline
+                payload & malware \\
+    				\hline
+    				harmless file & legitimate file\\
+    				\hline
+    				250Mo.zip & \multirow{ 4}{*}{little boy (size)} \\
+    				500Mo.zip &  \\
+    				1Go.zip &  \\
+    				2Go.zip &  \\
+    				\hline
+    				r.zip &  quine\\
+    				\hline
+    				snake.zip &  snake\\
+    				\hline
+    				42.tar.bz2 & fragmentation \\
+    				\hline
+ 			\end{tabular}
+ 		\end{normalsize}
+	\end{center}
+\end{table}
+
+\end{document}

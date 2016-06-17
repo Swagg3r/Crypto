@@ -1,0 +1,64 @@
+Resultat pour le fichier generateurs/file.gz :
+9d3fd552def1632dc9357e49e9232fdb5f8cacc551da007910fc5534d0917dbe
+Ratio de detection : 1/57
+
+Nom Antivirus             Statut     Complement
+---------------------     ---------- -----------------------
+
+VBA32                     Dangereux  suspected of GZIP.MailBomb
+Qihoo-360                 Normal
+Avast                     Normal
+Ad-Aware                  Normal
+Bkav                      Normal
+Antiy-AVL                 Normal
+Ikarus                    Normal
+Kingsoft                  Normal
+AegisLab                  Normal
+Baidu-International       Normal
+AhnLab-V3                 Normal
+Panda                     Normal
+Rising                    Normal
+nProtect                  Normal
+K7AntiVirus               Normal
+TrendMicro-HouseCall      Normal
+Comodo                    Normal
+Emsisoft                  Normal
+CAT-QuickHeal             Normal
+K7GW                      Normal
+ALYac                     Normal
+SUPERAntiSpyware          Normal
+McAfee-GW-Edition         Normal
+DrWeb                     Normal
+Baidu                     Normal
+TrendMicro                Normal
+ViRobot                   Normal
+Microsoft                 Normal
+Kaspersky                 Normal
+MicroWorld-eScan          Normal
+Tencent                   Normal
+Fortinet                  Normal
+Zoner                     Normal
+TotalDefense              Normal
+Arcabit                   Normal
+Jiangmin                  Normal
+Cyren                     Normal
+McAfee                    Normal
+NANO-Antivirus            Normal
+Alibaba                   Normal
+ClamAV                    Normal
+F-Secure                  Normal
+VIPRE                     Normal
+Yandex                    Normal
+Avira                     Normal
+F-Prot                    Normal
+AVG                       Normal
+Zillya                    Normal
+Sophos                    Normal
+GData                     Normal
+Symantec                  Normal
+AVware                    Normal
+Malwarebytes              Normal
+TheHacker                 Normal
+ESET-NOD32                Normal
+BitDefender               Normal
+CMC                       Normal

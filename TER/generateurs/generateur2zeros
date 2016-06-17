@@ -1,0 +1,37 @@
+#!/usr/bin/env perl
+# use warnings;
+
+
+#Raccourcis :
+# Remplacement multiligne :  CTRL + D
+# Commentaire : ctrl + *
+
+# \d => [0-9]
+# \D => tout sauf [0-9]
+# \w => [0-9a-zA-Z]
+# \w => tout sauf \w
+# \s => [espace]\t\n\r\f
+# \S
+
+# open (OUT, ">toto"); => Ouvre le fichier toto en ecriture (s'il exite c va l'ecraser).
+# open (OUT, ">>toto"); => Ouvre le fichier toto en ecriture et va ecrire a la fin.
+# open(SORTED, "sort toto | "); => Ouvre le fichier toto trier.
+# open(SORTOUT, "| sort"); => Ecrit dans le fichier en le triant.
+
+
+#Generation d'un fichier d'une taille passée en parametres.
+$tailleFinal = shift or die ("Usage : ./generateur2zeros <taille en Mo>");
+$tmp = $tailleFinal;
+$tailleFinal = $tailleFinal * 1000000;
+$file = "file";
+
+#Ouverture du fichier index.html
+open (OUT, ">$file");
+$tailleFichier = -s $file;
+while ($tailleFichier < $tailleFinal) {
+	print OUT "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+	$tailleFichier = -s $file;
+}
+print "La taille voulue est de $tmp Mo\n";
+print "La taille du fichier genere est de [$tailleFichier]\n";
+close(OUT);

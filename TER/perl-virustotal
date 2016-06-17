@@ -1,0 +1,130 @@
+#!/usr/bin/perl
+
+# Copyright 2012- Christopher M. Frenz
+# This script is free software - it may be used, copied, redistributed, and/or modified
+# under the terms laid forth in the Perl Artistic License
+
+use LWP::UserAgent;
+use JSON;
+use strict;
+use JSON qw( decode_json );
+
+#Code to submit a file to Virus Total
+my $ua = LWP::UserAgent->new(ssl_opts => { verify_hostname => 1 });
+my $url='https://www.virustotal.com/vtapi/v2/file/scan';
+
+# ------------------------------    Selection du fichier a analyser   ---------------------------------------------
+#my $file = '/home/swagger/Bureau/toto.txt';
+
+my $file = shift or die "Pas de fichier en argument";
+if (! -e $file) {
+	die "Le fichier n'existe pas !\n";
+}
+
+#------------------------------------------------------------------------------------------------------------------
+
+my $key='b29505c40361fdb5d202f6cc4ab6185f4bf47afa49522d59ddde79a32d947603';
+
+my $response = $ua->post( $url,
+    Content_Type => 'multipart/form-data',
+    Content => ['apikey' => $key,
+    'file' => [$file]]
+  );
+die "$url error: ", $response->status_line
+   unless $response->is_success;
+my $results=$response->content;
+
+#pulls the sha256 value out of the JSON response
+#Note: there are many other values that could also be pulled out
+my $json = JSON->new->allow_nonref;   
+my $decjson = $json->decode( $results);
+my $sha=$decjson->{"sha256"};
+
+
+#Code to retrieve the results that pertain to a submitted file by hash value
+$url='https://www.virustotal.com/vtapi/v2/file/report';
+my $i = 0;
+
+while (not $decjson->{"positives"} ge 0) {
+    $i++;
+    print "Tentative : $i\n";
+    sleep 30;
+	#die "L'analyse n'est pas encore finie, relancez le script dans un moment svp!\n";
+    $response = $ua->post( $url,['apikey' => $key,'resource' => $sha]);
+    die "$url error: ", $response->status_line
+       unless $response->is_success;
+    $results=$response->content;
+
+    #processes the JSON to see how many AV products consider the file a virus
+    $json = JSON->new->allow_nonref;   
+    $decjson = $json->decode( $results);
+}
+
+#Affichage des resultats
+print "Resultat pour le fichier ".$file." :\n";
+print $sha ."\n";
+
+#Affichage du ratio de detection
+print "Ratio de detection : ";
+print $decjson->{"positives"};
+print "/".$decjson->{"total"}."\n";
+
+#Sauvegarde des resultats pour chaque analyseur dans un fichier.
+my @tableau = ();
+my $nomAV;
+my $valeurDetection;
+my $nomMalware;
+
+foreach $key (keys %{$decjson->{scans}}){
+    my $item = $decjson->{scans}{$key};
+    if ($decjson->{scans}->{$key}->{detected}) {
+    	unshift(@tableau,$key);
+    }else {
+    	push(@tableau,$key);
+    }
+};
+
+my $generation = 0;
+print "Generer un fichier de log ? (o/N) : ";
+my $reponse = <>;
+chomp $reponse;
+if ($reponse eq "o" || $reponse eq "O") {
+    $generation = 1;
+}
+
+if ($generation) {
+    open(OUT,'>:encoding(UTF-8)',"virustotal_$sha.log");
+    #Affichage des resultats
+    print OUT "Resultat pour le fichier ".$file." :\n";
+    print OUT $sha ."\n";
+
+    #Affichage du ratio de detection
+    print OUT "Ratio de detection : ";
+    print OUT $decjson->{"positives"};
+    print OUT "/".$decjson->{"total"}."\n\n";
+    foreach my $v (@tableau) {
+    $nomAV = $v;
+    if ($decjson->{scans}->{$v}->{detected}) {
+      $valeurDetection = "Dangereux";
+      $nomMalware = $decjson->{scans}->{$v}->{result};
+    } else {
+      $valeurDetection = "Normal";
+      $nomMalware = "";
+    }
+    write(OUT);
+    }
+    close(OUT);
+    # close (IN);
+}
+
+format OUT =
+@<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<< @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+$nomAV,$valeurDetection,$nomMalware;
+.
+
+format OUT_TOP =
+@<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<< @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+"Nom Antivirus","Statut","Complement"
+---------------------     ---------- -----------------------
+
+.
